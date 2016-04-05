@@ -1,0 +1,10 @@
+E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\sandboxConsole.exe.config
+E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\sandboxConsole.exe
+E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\sandboxConsole.pdb
+E:\sandbox\sandboxConsole\sandboxConsole\obj\Debug\sandboxConsole.csprojResolveAssemblyReference.cache
+E:\sandbox\sandboxConsole\sandboxConsole\obj\Debug\sandboxConsole.exe
+E:\sandbox\sandboxConsole\sandboxConsole\obj\Debug\sandboxConsole.pdb
+E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.dll
+E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.xml
+E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.SqlServer.dll
+E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.SqlServer.xml

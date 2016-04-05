@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="omproModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Bookmakers">
+    <Key>
+      <PropertyRef Name="BookmakerId" />
+    </Key>
+    <Property Name="BookmakerId" Type="int" Nullable="false" />
+    <Property Name="BookmakerName" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Matches">
+    <Key>
+      <PropertyRef Name="MatchId" />
+    </Key>
+    <Property Name="MatchId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="BookmakerId" Type="int" Nullable="false" />
+    <Property Name="CompetitionId" Type="int" Nullable="false" />
+    <Property Name="Team1Id" Type="int" Nullable="false" />
+    <Property Name="Team1Name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Team2Id" Type="int" Nullable="false" />
+    <Property Name="Team2Name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Team1Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="Team2Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="DrawOdds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+    <Property Name="Time" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="CompetitionName" Type="varchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="omproModelStoreContainer">
+    <EntitySet Name="Bookmakers" EntityType="Self.Bookmakers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Matches" EntityType="Self.Matches" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="omproModelStoreContainer" CdmEntityContainer="omproEntities">
+    <EntitySetMapping Name="Bookmakers">
+      <EntityTypeMapping TypeName="omproModel.Bookmaker">
+        <MappingFragment StoreEntitySet="Bookmakers">
+          <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
+          <ScalarProperty Name="BookmakerName" ColumnName="BookmakerName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Matches">
+      <EntityTypeMapping TypeName="omproModel.Match">
+        <MappingFragment StoreEntitySet="Matches">
+          <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
+          <ScalarProperty Name="MatchId" ColumnName="MatchId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
+          <ScalarProperty Name="CompetitionId" ColumnName="CompetitionId" />
+          <ScalarProperty Name="Team1Id" ColumnName="Team1Id" />
+          <ScalarProperty Name="Team1Name" ColumnName="Team1Name" />
+          <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
+          <ScalarProperty Name="Team2Name" ColumnName="Team2Name" />
+          <ScalarProperty Name="Team1Odds" ColumnName="Team1Odds" />
+          <ScalarProperty Name="Team2Odds" ColumnName="Team2Odds" />
+          <ScalarProperty Name="DrawOdds" ColumnName="DrawOdds" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
