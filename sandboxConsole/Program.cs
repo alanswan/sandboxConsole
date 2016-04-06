@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using sandboxConsole.Helpers.XML;
 using sandboxConsole.EF;
 using sandboxConsole.Misc;
+using sandboxConsole.Helpers.XML.Exchange;
 
 namespace sandboxConsole
 {
@@ -15,17 +16,20 @@ namespace sandboxConsole
         static void Main(string[] args)
         {
             WH wh = new WH();
+            Smar smar = new Smar();
+
+            smar.ReadSmarUKFootball();
 
             wh.ReadWHUKFootball();
             wh.ReadWHEuroFootball();
             wh.ReadWHInternationalFootball();
-            
-            if(wh.Matches.Count() > 0)
+
+            if (wh.Matches.Count() > 0)
             {
                 db.Matches.RemoveRange(db.Matches.Where(x => x.BookmakerId == Constants.WilliamHillId));
             }
-            
-            foreach(Models.Match match in wh.Matches)
+
+            foreach (Models.Match match in wh.Matches)
             {
                 db.Matches.Add(new Match()
                 {
@@ -49,6 +53,8 @@ namespace sandboxConsole
 
             db.SaveChanges();
 
+
+            //smar.ReadSmarUKFootball();
         }
     }
 }
