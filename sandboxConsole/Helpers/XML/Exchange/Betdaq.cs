@@ -1,4 +1,5 @@
-﻿using sandboxConsole.Models;
+﻿using sandboxConsole.Misc;
+using sandboxConsole.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +36,29 @@ namespace sandboxConsole.Helpers.XML.Exchange
                 };
                 Competitions.Add(comp);
 
-                foreach(XmlNode matchNode in compNode.ChildNodes)
+                foreach(XmlNode groupNode in compNode.ChildNodes)
                 {
-
+                    if(groupNode.Attributes["NAME"].Value.ToString().Contains("Matches"))
+                    {
+                        foreach(XmlNode matchNode in groupNode.ChildNodes)
+                        {
+                            Match match = new Match()
+                            {
+                                Id = Convert.ToInt32(matchNode.Attributes["ID"].Value),
+                                Name = matchNode.Attributes["NAME"].Value.ToString(),
+                                Bookmaker = Constants.BetdaqName,
+                                BookmakerId = Constants.BetdaqId,
+                                Competition = comp,
+                                LastUpdated = DateTime.Now,
+                                Team1 = new Team(),
+                                Team2 = new Team(),
+                                Odds = new Odds(),
+                                Date = Convert.ToDateTime(matchNode.Attributes["DATE"].Value),
+                                Time = "",
+                                Url = ""
+                            };
+                        }
+                    }
                 }
                 
             }
