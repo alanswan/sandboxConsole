@@ -37,7 +37,17 @@ namespace sandboxConsole.Helpers.XML.Exchange
             //    var test = "";
             //}
             //doc.
-            
+
+            using (var client = new WebClient())
+            {
+                var xml = client.DownloadString("http://odds.smarkets.com/oddsfeed.xml");
+                using (var strReader = new StringReader(xml))
+                using (var reader = XmlReader.Create(strReader))
+                {
+
+                }
+            }
+
             doc.Load("http://odds.smarkets.com/oddsfeed.xml");
             
 
@@ -52,19 +62,26 @@ namespace sandboxConsole.Helpers.XML.Exchange
             {
                 if(node.Attributes["type"].Value.ToString().ToUpper() == "FOOTBALL MATCH")
                 {
+                    var comp = new Competition()
+                    {
+                        Id = 0,
+                        Name = node.Attributes["parent"].Value.ToString()
+                    };
+
                     var match = new Models.Match()
                     {
                         Id = Convert.ToInt32(node.Attributes["id"].Value),
                         Name = node.Attributes["name"].Value.ToString(),
                         Bookmaker = Constants.SmarketsName,
                         BookmakerId = Constants.SmarketsId,
-                        //Competition = comp,
-                        //LastUpdated = Convert.ToDateTime(matchNode.Attributes["lastUpdateTime"].Value),
+                        Competition = comp,
+                        LastUpdated = DateTime.Now,
                         Team1 = new Team(),
                         Team2 = new Team(),
                         Odds = new Odds(),
-                        //Date = Convert.ToDateTime(matchNode.Attributes["date"].Value),
-                        //Time = matchNode.Attributes["time"].Value.ToString()
+                        Date = Convert.ToDateTime(node.Attributes["date"].Value),
+                        Time = node.Attributes["time"].Value.ToString(),
+                        Url = node.Attributes["url"].Value.ToString()
                     };
                     foreach (XmlNode matchNode in node.ChildNodes)
                     {
@@ -74,14 +91,44 @@ namespace sandboxConsole.Helpers.XML.Exchange
                             foreach (XmlNode winnerNode in matchNode.ChildNodes)
                             {
                                 var teamName = winnerNode.Attributes["name"].Value.ToString();
+                                var teamId = Convert.ToInt32(winnerNode.Attributes["id"].Value);
                                 var homeaway = winnerNode.Attributes["slug"].Value.ToString();
-                                var odds = Convert.ToDecimal(winnerNode.SelectSingleNode("bids").FirstChild.Attributes["decimal"]);
-                                
+
+                                XmlNode bidsNode = winnerNode.SelectSingleNode("bids").FirstChild;
+                                if (bidsNode != null)
+                                {
+                                    var odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value);
+
+                                    if (homeaway == "home")
+                                    {
+                                        match.Team1.Id = teamId;
+                                        match.Team1.Name = teamName;
+                                        match.Odds.Team1 = odds;
+                                    }
+                                    else if (homeaway == "away")
+                                    {
+                                        match.Team2.Id = teamId;
+                                        match.Team2.Name = teamName;
+                                        match.Odds.Team2 = odds;
+                                    }
+                                    else
+                                    {
+                                        match.Odds.Draw = odds;
+                                    }
+                                }
                             }
                         }
                     }
+                    Matches.Add(match);
                 }
             }
         }
+
+
+
+
+
+
+
     }
 }

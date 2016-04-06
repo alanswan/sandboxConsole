@@ -17,7 +17,9 @@ namespace sandboxConsole
         {
             WH wh = new WH();
             Smar smar = new Smar();
+            Betdaq betdaq = new Betdaq();
 
+            betdaq.ReadBetdaqFootball();
             smar.ReadSmarUKFootball();
 
             wh.ReadWHUKFootball();
