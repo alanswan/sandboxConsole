@@ -20,7 +20,7 @@ namespace sandboxConsole
             Betdaq betdaq = new Betdaq();
 
             betdaq.ReadBetdaqFootball();
-            smar.ReadSmarUKFootball();
+           // smar.ReadSmarUKFootball();
 
             wh.ReadWHUKFootball();
             wh.ReadWHEuroFootball();
@@ -29,6 +29,7 @@ namespace sandboxConsole
             if (wh.Matches.Count() > 0)
             {
                 db.Matches.RemoveRange(db.Matches.Where(x => x.BookmakerId == Constants.WilliamHillId));
+                db.ExchangeMatches.RemoveRange(db.ExchangeMatches.Where(x => x.BookmakerId == Constants.BetdaqId));
             }
 
             foreach (Models.Match match in wh.Matches)
@@ -53,6 +54,33 @@ namespace sandboxConsole
                 });
             }
 
+            db.SaveChanges();
+
+            foreach (Models.Match match in betdaq.Matches)
+            {
+                if (match.Team1.Name != null)
+                {
+                    db.ExchangeMatches.Add(new ExchangeMatch()
+                    {
+                        MatchId = match.Id,
+                        Name = match.Name,
+                        BookmakerId = match.BookmakerId,
+                        CompetitionId = match.Competition.Id,
+                        CompetitionName = match.Competition.Name,
+                        Team1Id = match.Team1.Id,
+                        Team1Name = match.Team1.Name,
+                        Team2Id = match.Team2.Id,
+                        Team2Name = match.Team2.Name,
+                        Team1Odds = match.Odds.Team1,
+                        Team2Odds = match.Odds.Team2,
+                        DrawOdds = match.Odds.Draw,
+                        Date = match.Date,
+                        LastUpdated = match.LastUpdated,
+                        Time = match.Time
+                    });
+                }
+            }
+            
             db.SaveChanges();
 
 

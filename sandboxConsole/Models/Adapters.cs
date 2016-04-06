@@ -28,6 +28,7 @@ namespace sandboxConsole.Models
         public DateTime LastUpdated { get; set; }
         public string Time { get; set; }
         public string Url { get; set; }
+        public string MobileUrl { get; set; }
 
     }
 

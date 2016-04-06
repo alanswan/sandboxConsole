@@ -15,7 +15,7 @@ namespace sandboxConsole.EF
 using System;
     using System.Collections.Generic;
     
-public partial class Match
+public partial class ExchangeMatch
 {
 
     public int MatchId { get; set; }

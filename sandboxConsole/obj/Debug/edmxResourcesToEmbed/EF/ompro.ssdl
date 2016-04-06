@@ -7,6 +7,26 @@
     <Property Name="BookmakerId" Type="int" Nullable="false" />
     <Property Name="BookmakerName" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <EntityType Name="ExchangeMatches">
+    <Key>
+      <PropertyRef Name="MatchId" />
+    </Key>
+    <Property Name="MatchId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="BookmakerId" Type="int" Nullable="false" />
+    <Property Name="CompetitionId" Type="int" Nullable="false" />
+    <Property Name="Team1Id" Type="int" Nullable="false" />
+    <Property Name="Team1Name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Team2Id" Type="int" Nullable="false" />
+    <Property Name="Team2Name" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Team1Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="Team2Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="DrawOdds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+    <Property Name="Time" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="CompetitionName" Type="varchar" MaxLength="200" Nullable="false" />
+  </EntityType>
   <EntityType Name="Matches">
     <Key>
       <PropertyRef Name="MatchId" />
@@ -29,6 +49,7 @@
   </EntityType>
   <EntityContainer Name="omproModelStoreContainer">
     <EntitySet Name="Bookmakers" EntityType="Self.Bookmakers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ExchangeMatches" EntityType="Self.ExchangeMatches" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Matches" EntityType="Self.Matches" Schema="dbo" store:Type="Tables" />
   </EntityContainer>
 </Schema>

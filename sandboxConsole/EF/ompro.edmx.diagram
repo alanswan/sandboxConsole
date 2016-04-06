@@ -7,6 +7,7 @@
       <Diagram DiagramId="521f8df31f17415eb5b23dc4b83252de" Name="Diagram1">
         <EntityTypeShape EntityType="omproModel.Bookmaker" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="omproModel.Match" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="omproModel.ExchangeMatch" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

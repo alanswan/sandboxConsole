@@ -11,3 +11,10 @@ E:\sandbox\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.SqlServer.xml
 \\Mac\Home\Documents\sandboxConsole\sandboxConsole\bin\Debug\sandboxConsole.exe.config
 \\Mac\Home\Documents\sandboxConsole\sandboxConsole\obj\Debug\sandboxConsole.exe
 \\Mac\Home\Documents\sandboxConsole\sandboxConsole\obj\Debug\sandboxConsole.pdb
+\\Mac\Home\Documents\sandboxConsole\sandboxConsole\bin\Debug\sandboxConsole.exe
+\\Mac\Home\Documents\sandboxConsole\sandboxConsole\bin\Debug\sandboxConsole.pdb
+\\Mac\Home\Documents\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.dll
+\\Mac\Home\Documents\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.SqlServer.dll
+\\Mac\Home\Documents\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.xml
+\\Mac\Home\Documents\sandboxConsole\sandboxConsole\bin\Debug\EntityFramework.SqlServer.xml
+\\Mac\Home\Documents\sandboxConsole\sandboxConsole\obj\Debug\sandboxConsole.csprojResolveAssemblyReference.cache

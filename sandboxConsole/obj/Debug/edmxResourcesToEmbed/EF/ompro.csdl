@@ -30,5 +30,26 @@
   <EntityContainer Name="omproEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Bookmakers" EntityType="Self.Bookmaker" />
     <EntitySet Name="Matches" EntityType="Self.Match" />
+    <EntitySet Name="ExchangeMatches" EntityType="omproModel.ExchangeMatch" />
   </EntityContainer>
+  <EntityType Name="ExchangeMatch">
+    <Key>
+      <PropertyRef Name="MatchId" />
+    </Key>
+    <Property Name="MatchId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BookmakerId" Type="Int32" Nullable="false" />
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+    <Property Name="Team1Id" Type="Int32" Nullable="false" />
+    <Property Name="Team1Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Team2Id" Type="Int32" Nullable="false" />
+    <Property Name="Team2Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Team1Odds" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="Team2Odds" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="DrawOdds" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Time" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>
