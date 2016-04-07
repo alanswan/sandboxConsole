@@ -31,6 +31,7 @@
           <Property Name="CompetitionName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Bet" Type="varchar" MaxLength="200" />
           <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="MoneyInMarket" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Matches">
           <Key>
@@ -51,6 +52,7 @@
           <Property Name="CompetitionName" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Bet" Type="varchar" MaxLength="200" />
           <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="MoneyInMarket" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Teams">
           <Key>
@@ -128,6 +130,7 @@
           <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Match">
           <Key>
@@ -148,6 +151,7 @@
           <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -184,6 +188,7 @@
           <EntitySetMapping Name="ExchangeMatches">
             <EntityTypeMapping TypeName="omproModel.ExchangeMatch">
               <MappingFragment StoreEntitySet="ExchangeMatches">
+                <ScalarProperty Name="MoneyInMarket" ColumnName="MoneyInMarket" />
                 <ScalarProperty Name="Odds" ColumnName="Odds" />
                 <ScalarProperty Name="Bet" ColumnName="Bet" />
                 <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
@@ -205,6 +210,7 @@
           <EntitySetMapping Name="Matches">
             <EntityTypeMapping TypeName="omproModel.Match">
               <MappingFragment StoreEntitySet="Matches">
+                <ScalarProperty Name="MoneyInMarket" ColumnName="MoneyInMarket" />
                 <ScalarProperty Name="Odds" ColumnName="Odds" />
                 <ScalarProperty Name="Bet" ColumnName="Bet" />
                 <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
