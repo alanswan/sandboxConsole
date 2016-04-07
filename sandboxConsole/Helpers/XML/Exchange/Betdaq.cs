@@ -67,8 +67,8 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                             moburl = oddsChildNode.Attributes["MOBILE_URL"].Value.ToString();
                                         }
                                         else {
-                                            var name = oddsChildNode.Attributes["NAME"].Value.ToUpper();
-                                            if (name != "DRAW")
+                                            var name = oddsChildNode.Attributes["NAME"].Value.ToString();
+                                            if (name.ToUpper() != "DRAW")
                                             {
                                                 TeamMaintenance.IsTeamNameRecorded(name, NewTeams, CurrentTeams);
                                                 teams.Add(new Models.Team(name, CurrentTeams));
@@ -132,7 +132,8 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                                         match.Bet = teams.Last().Name;
                                                         match.Odds = Convert.ToDecimal(teamNode.FirstChild?.FirstChild?.Attributes["VALUE"]?.Value);
                                                     }
-                                                    Matches.Add(match);
+                                                    if(match.Bet != null)
+                                                        Matches.Add(match);
                                                 }
 
                                             }
