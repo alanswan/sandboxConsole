@@ -78,7 +78,7 @@ namespace sandboxConsole.Helpers.XML.Exchange
                         LastUpdated = DateTime.Now,
                         Team1 = new Team(),
                         Team2 = new Team(),
-                        Odds = new Odds(),
+                       // Odds = new Odds(),
                         Date = Convert.ToDateTime(node.Attributes["date"].Value),
                         Time = node.Attributes["time"].Value.ToString(),
                         Url = node.Attributes["url"].Value.ToString()
@@ -98,23 +98,25 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                 if (bidsNode != null)
                                 {
                                     var odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value);
-
-                                    if (homeaway == "home")
-                                    {
-                                        match.Team1.Id = teamId;
-                                        match.Team1.Name = teamName;
-                                        match.Odds.Team1 = odds;
-                                    }
-                                    else if (homeaway == "away")
-                                    {
-                                        match.Team2.Id = teamId;
-                                        match.Team2.Name = teamName;
-                                        match.Odds.Team2 = odds;
-                                    }
-                                    else
-                                    {
-                                        match.Odds.Draw = odds;
-                                    }
+                                    //_________________________________________________________________
+                                    // Commeted out due to data structure change
+                                    //if (homeaway == "home")
+                                    //{
+                                    //    match.Team1.Id = teamId;
+                                    //    match.Team1.Name = teamName;
+                                    //    match.Odds.Team1 = odds;
+                                    //}
+                                    //else if (homeaway == "away")
+                                    //{
+                                    //    match.Team2.Id = teamId;
+                                    //    match.Team2.Name = teamName;
+                                    //    match.Odds.Team2 = odds;
+                                    //}
+                                    //else
+                                    //{
+                                    //    match.Odds.Draw = odds;
+                                    //}
+                                    //________________________________________________________
                                 }
                             }
                         }

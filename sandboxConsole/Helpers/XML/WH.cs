@@ -1,4 +1,5 @@
 ﻿using sandboxConsole.EF;
+using sandboxConsole.Helpers.Maintenance;
 using sandboxConsole.Misc;
 using sandboxConsole.Models;
 using System;
@@ -15,12 +16,14 @@ namespace sandboxConsole.Helpers.XML
         
         public List<Competition> Competitions;
         public List<Models.Match> Matches;
-        public List<Team> Teams;
-        
-        public WH() 
+        public List<EF.Team> CurrentTeams;
+        public List<EF.TeamsNotFound> NewTeams;
+
+        public WH(List<EF.Team> teams, List<TeamsNotFound> newTeams) 
         {
             this.Competitions = new List<Competition>();
-            this.Teams = new List<Team>();
+            this.CurrentTeams = teams;
+            this.NewTeams = newTeams;
             this.Matches = new List<Models.Match>();
         }
         
@@ -72,51 +75,38 @@ namespace sandboxConsole.Helpers.XML
                                 var matchNodeName = matchNode.Attributes["name"].Value.ToString();
                                 if (matchNodeName.Contains("Match Betting"))
                                 {
-                                    var match = new Models.Match()
-                                    {
-                                        Id = Convert.ToInt32(matchNode.Attributes["id"].Value),
-                                        Name = matchNodeName,
-                                        Bookmaker = Constants.WilliamHillName,
-                                        BookmakerId = Constants.WilliamHillId,
-                                        Competition = comp,
-                                        LastUpdated = Convert.ToDateTime(matchNode.Attributes["lastUpdateTime"].Value),
-                                        Team1 = new Team(),
-                                        Team2 = new Team(),
-                                        Odds = new Odds(),
-                                        Date = Convert.ToDateTime(matchNode.Attributes["date"].Value),
-                                        Time = matchNode.Attributes["time"].Value.ToString()
-                                    };
-
+                                    List<Models.Team> teamsForMatchFields = new List<Models.Team>();
                                     foreach (XmlNode parNode in matchNode.ChildNodes)
                                     {
-                                        //store team if not already there
-                                        var team = new Team()
-                                        {
-                                            Id = Convert.ToInt32(parNode.Attributes["id"].Value),
-                                            Name = parNode.Attributes["name"].Value.ToString()
-                                        };
-                                        if (!Teams.Any(x => x.Name == team.Name)) { Teams.Add(team); }
-
-                                        if (team.Name == "Draw")
-                                        {
-                                            match.Odds.Draw = Convert.ToDecimal(parNode.Attributes["oddsDecimal"].Value);
-                                        }
-                                        else if (match.Team1.Name == null)
-                                        {
-
-                                            match.Team1.Name = team.Name;
-                                            match.Team1.Id = team.Id;
-                                            match.Odds.Team1 = Convert.ToDecimal(parNode.Attributes["oddsDecimal"].Value);
-                                        }
-                                        else
-                                        {
-                                            match.Team2.Name = team.Name;
-                                            match.Team2.Id = team.Id;
-                                            match.Odds.Team2 = Convert.ToDecimal(parNode.Attributes["oddsDecimal"].Value);
-                                        }
-
+                                        TeamMaintenance.IsTeamNameRecorded(parNode.Attributes["name"].Value.ToString(), NewTeams, CurrentTeams);
+                                        var team = new Models.Team(parNode.Attributes["name"].Value.ToString(), CurrentTeams);
+                                        if(team.Name != "Draw")
+                                            teamsForMatchFields.Add(team);
                                     }
-                                    Matches.Add(match);
+                                    foreach (XmlNode parNode in matchNode.ChildNodes)
+                                    {
+                                        var match = new Models.Match()
+                                        {
+                                            Id = Convert.ToInt32(matchNode.Attributes["id"].Value),
+                                            Name = matchNodeName,
+                                            Bookmaker = Constants.WilliamHillName,
+                                            BookmakerId = Constants.WilliamHillId,
+                                            Competition = comp,
+                                            LastUpdated = Convert.ToDateTime(matchNode.Attributes["lastUpdateTime"].Value),
+                                            Team1 = teamsForMatchFields.First(),
+                                            Team2 = teamsForMatchFields.Last(),
+                                            Date = Convert.ToDateTime(matchNode.Attributes["date"].Value),
+                                            Time = matchNode.Attributes["time"].Value.ToString()
+                                        };
+                                        //store team if not already there
+                                        
+                                        var team = new Models.Team(parNode.Attributes["name"].Value.ToString(), CurrentTeams);
+                                        match.Bet = team.Name;
+                                        match.Odds = Convert.ToDecimal(parNode.Attributes["oddsDecimal"].Value);
+                                        
+                                        Matches.Add(match);
+                                    }
+                                    
                                 }
                             }
 

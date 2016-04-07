@@ -12,9 +12,11 @@ namespace sandboxConsole.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Bookmaker
+    public partial class Team
     {
-        public int BookmakerId { get; set; }
-        public string BookmakerName { get; set; }
+        public int TeamId { get; set; }
+        public string TeamName { get; set; }
+        public int OMTeamId { get; set; }
+        public Nullable<bool> DefaultName { get; set; }
     }
 }

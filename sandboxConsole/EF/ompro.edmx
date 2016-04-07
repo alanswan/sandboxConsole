@@ -14,8 +14,9 @@
         </EntityType>
         <EntityType Name="ExchangeMatches">
           <Key>
-            <PropertyRef Name="MatchId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MatchId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="BookmakerId" Type="int" Nullable="false" />
@@ -24,18 +25,18 @@
           <Property Name="Team1Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Team2Id" Type="int" Nullable="false" />
           <Property Name="Team2Name" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Team1Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Team2Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="DrawOdds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="LastUpdated" Type="datetime" Nullable="false" />
           <Property Name="Time" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="CompetitionName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Bet" Type="varchar" MaxLength="200" />
+          <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="Matches">
           <Key>
-            <PropertyRef Name="MatchId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MatchId" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="BookmakerId" Type="int" Nullable="false" />
@@ -44,18 +45,35 @@
           <Property Name="Team1Name" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="Team2Id" Type="int" Nullable="false" />
           <Property Name="Team2Name" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="Team1Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Team2Odds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="DrawOdds" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="LastUpdated" Type="datetime" Nullable="false" />
           <Property Name="Time" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="CompetitionName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Bet" Type="varchar" MaxLength="200" />
+          <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Teams">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TeamName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="OMTeamId" Type="int" Nullable="false" />
+          <Property Name="DefaultName" Type="bit" />
+        </EntityType>
+        <EntityType Name="TeamsNotFound">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TeamName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityContainer Name="omproModelStoreContainer">
           <EntitySet Name="Bookmakers" EntityType="Self.Bookmakers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExchangeMatches" EntityType="Self.ExchangeMatches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Matches" EntityType="Self.Matches" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Teams" EntityType="Self.Teams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TeamsNotFound" EntityType="Self.TeamsNotFound" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -68,35 +86,34 @@
           <Property Name="BookmakerId" Type="Int32" Nullable="false" />
           <Property Name="BookmakerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
-        <EntityType Name="Match">
-          <Key>
-            <PropertyRef Name="MatchId" />
-          </Key>
-          <Property Name="MatchId" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="BookmakerId" Type="Int32" Nullable="false" />
-          <Property Name="CompetitionId" Type="Int32" Nullable="false" />
-          <Property Name="Team1Id" Type="Int32" Nullable="false" />
-          <Property Name="Team1Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Team2Id" Type="Int32" Nullable="false" />
-          <Property Name="Team2Name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Team1Odds" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Team2Odds" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="DrawOdds" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Time" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CompetitionName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-        </EntityType>
         <EntityContainer Name="omproEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Bookmakers" EntityType="Self.Bookmaker" />
-          <EntitySet Name="Matches" EntityType="Self.Match" />
+          <EntitySet Name="Teams" EntityType="omproModel.Team" />
+          <EntitySet Name="TeamsNotFounds" EntityType="omproModel.TeamsNotFound" />
           <EntitySet Name="ExchangeMatches" EntityType="omproModel.ExchangeMatch" />
-        </EntityContainer>
+          <EntitySet Name="Matches" EntityType="omproModel.Match" />
+          </EntityContainer>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TeamName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OMTeamId" Type="Int32" Nullable="false" />
+          <Property Name="DefaultName" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="TeamsNotFound">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TeamName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="ExchangeMatch">
           <Key>
-            <PropertyRef Name="MatchId" />
+            <PropertyRef Name="Id" />
           </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="MatchId" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="BookmakerId" Type="Int32" Nullable="false" />
@@ -105,15 +122,34 @@
           <Property Name="Team1Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Team2Id" Type="Int32" Nullable="false" />
           <Property Name="Team2Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="Team1Odds" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="Team2Odds" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
-          <Property Name="DrawOdds" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Time" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
-      </Schema>
+        <EntityType Name="Match">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MatchId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="BookmakerId" Type="Int32" Nullable="false" />
+          <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+          <Property Name="Team1Id" Type="Int32" Nullable="false" />
+          <Property Name="Team1Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Team2Id" Type="Int32" Nullable="false" />
+          <Property Name="Team2Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Time" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -127,37 +163,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Matches">
-            <EntityTypeMapping TypeName="omproModel.Match">
-              <MappingFragment StoreEntitySet="Matches">
-                <ScalarProperty Name="MatchId" ColumnName="MatchId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
-                <ScalarProperty Name="CompetitionId" ColumnName="CompetitionId" />
-                <ScalarProperty Name="Team1Id" ColumnName="Team1Id" />
-                <ScalarProperty Name="Team1Name" ColumnName="Team1Name" />
-                <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
-                <ScalarProperty Name="Team2Name" ColumnName="Team2Name" />
-                <ScalarProperty Name="Team1Odds" ColumnName="Team1Odds" />
-                <ScalarProperty Name="Team2Odds" ColumnName="Team2Odds" />
-                <ScalarProperty Name="DrawOdds" ColumnName="DrawOdds" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-                <ScalarProperty Name="Time" ColumnName="Time" />
-                <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
+          <EntitySetMapping Name="Teams">
+            <EntityTypeMapping TypeName="omproModel.Team">
+              <MappingFragment StoreEntitySet="Teams">
+                <ScalarProperty Name="DefaultName" ColumnName="DefaultName" />
+                <ScalarProperty Name="OMTeamId" ColumnName="OMTeamId" />
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TeamsNotFounds">
+            <EntityTypeMapping TypeName="omproModel.TeamsNotFound">
+              <MappingFragment StoreEntitySet="TeamsNotFound">
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ExchangeMatches">
             <EntityTypeMapping TypeName="omproModel.ExchangeMatch">
               <MappingFragment StoreEntitySet="ExchangeMatches">
+                <ScalarProperty Name="Odds" ColumnName="Odds" />
+                <ScalarProperty Name="Bet" ColumnName="Bet" />
                 <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
                 <ScalarProperty Name="Time" ColumnName="Time" />
                 <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="DrawOdds" ColumnName="DrawOdds" />
-                <ScalarProperty Name="Team2Odds" ColumnName="Team2Odds" />
-                <ScalarProperty Name="Team1Odds" ColumnName="Team1Odds" />
                 <ScalarProperty Name="Team2Name" ColumnName="Team2Name" />
                 <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
                 <ScalarProperty Name="Team1Name" ColumnName="Team1Name" />
@@ -166,10 +198,32 @@
                 <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="MatchId" ColumnName="MatchId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Matches">
+            <EntityTypeMapping TypeName="omproModel.Match">
+              <MappingFragment StoreEntitySet="Matches">
+                <ScalarProperty Name="Odds" ColumnName="Odds" />
+                <ScalarProperty Name="Bet" ColumnName="Bet" />
+                <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Team2Name" ColumnName="Team2Name" />
+                <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
+                <ScalarProperty Name="Team1Name" ColumnName="Team1Name" />
+                <ScalarProperty Name="Team1Id" ColumnName="Team1Id" />
+                <ScalarProperty Name="CompetitionId" ColumnName="CompetitionId" />
+                <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MatchId" ColumnName="MatchId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

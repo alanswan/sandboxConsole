@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sandboxConsole.Helpers.Maintenance;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,6 @@ namespace sandboxConsole.Models
 
     public class Match
     {
-       
         public int Id { get; set; }
         public string Name { get; set; }
         public string Bookmaker { get; set; }
@@ -22,8 +22,8 @@ namespace sandboxConsole.Models
         public Competition Competition { get; set; }
         public Team Team1 { get; set; }
         public Team Team2 { get; set; }
-        public Odds Odds { get; set; }
-
+        public string Bet { get; set; }
+        public decimal Odds { get; set; }
         public DateTime Date { get; set; }
         public DateTime LastUpdated { get; set; }
         public string Time { get; set; }
@@ -36,6 +36,17 @@ namespace sandboxConsole.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public Team()
+        {
+        }
+
+        public Team(string name, List<EF.Team> correctTeams)
+        {
+            Dictionary<int, string> teamDict = TeamMaintenance.GetTeam(name, correctTeams);
+            this.Id = teamDict.First().Key;
+            this.Name = teamDict.First().Value;
+        }
     }
 
     public class Odds

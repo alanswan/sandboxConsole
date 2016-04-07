@@ -7,6 +7,7 @@ using sandboxConsole.Helpers.XML;
 using sandboxConsole.EF;
 using sandboxConsole.Misc;
 using sandboxConsole.Helpers.XML.Exchange;
+using sandboxConsole.Models;
 
 namespace sandboxConsole
 {
@@ -15,9 +16,12 @@ namespace sandboxConsole
         private static omproEntities db = new omproEntities();
         static void Main(string[] args)
         {
-            WH wh = new WH();
+            List<EF.Team> teams = db.Teams.ToList();
+            List<TeamsNotFound> newTeams = db.TeamsNotFounds.ToList();
+
+            WH wh = new WH(teams, newTeams);
             Smar smar = new Smar();
-            Betdaq betdaq = new Betdaq();
+            Betdaq betdaq = new Betdaq(teams, newTeams);
 
             betdaq.ReadBetdaqFootball();
            // smar.ReadSmarUKFootball();
@@ -34,7 +38,7 @@ namespace sandboxConsole
 
             foreach (Models.Match match in wh.Matches)
             {
-                db.Matches.Add(new Match()
+                db.Matches.Add(new EF.Match()
                 {
                     MatchId = match.Id,
                     Name = match.Name,
@@ -45,16 +49,13 @@ namespace sandboxConsole
                     Team1Name = match.Team1.Name,
                     Team2Id = match.Team2.Id,
                     Team2Name = match.Team2.Name,
-                    Team1Odds = match.Odds.Team1,
-                    Team2Odds = match.Odds.Team2,
-                    DrawOdds = match.Odds.Draw,
+                    Bet = match.Bet,
+                    Odds = match.Odds,
                     Date = match.Date,
                     LastUpdated = match.LastUpdated,
                     Time = match.Time
                 });
             }
-
-            db.SaveChanges();
 
             foreach (Models.Match match in betdaq.Matches)
             {
@@ -71,14 +72,19 @@ namespace sandboxConsole
                         Team1Name = match.Team1.Name,
                         Team2Id = match.Team2.Id,
                         Team2Name = match.Team2.Name,
-                        Team1Odds = match.Odds.Team1,
-                        Team2Odds = match.Odds.Team2,
-                        DrawOdds = match.Odds.Draw,
+                        Bet = match.Bet,
+                        Odds = match.Odds,
                         Date = match.Date,
                         LastUpdated = match.LastUpdated,
                         Time = match.Time
                     });
                 }
+            }
+
+            foreach(EF.TeamsNotFound team in newTeams)
+            {
+                if(!db.TeamsNotFounds.Any(x=>x.TeamName == team.TeamName))
+                db.TeamsNotFounds.Add(team);
             }
             
             db.SaveChanges();

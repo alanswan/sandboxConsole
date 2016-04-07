@@ -9,37 +9,33 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Matches">
-      <EntityTypeMapping TypeName="omproModel.Match">
-        <MappingFragment StoreEntitySet="Matches">
-          <ScalarProperty Name="MatchId" ColumnName="MatchId" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
-          <ScalarProperty Name="CompetitionId" ColumnName="CompetitionId" />
-          <ScalarProperty Name="Team1Id" ColumnName="Team1Id" />
-          <ScalarProperty Name="Team1Name" ColumnName="Team1Name" />
-          <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
-          <ScalarProperty Name="Team2Name" ColumnName="Team2Name" />
-          <ScalarProperty Name="Team1Odds" ColumnName="Team1Odds" />
-          <ScalarProperty Name="Team2Odds" ColumnName="Team2Odds" />
-          <ScalarProperty Name="DrawOdds" ColumnName="DrawOdds" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-          <ScalarProperty Name="Time" ColumnName="Time" />
-          <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
+    <EntitySetMapping Name="Teams">
+      <EntityTypeMapping TypeName="omproModel.Team">
+        <MappingFragment StoreEntitySet="Teams">
+          <ScalarProperty Name="DefaultName" ColumnName="DefaultName" />
+          <ScalarProperty Name="OMTeamId" ColumnName="OMTeamId" />
+          <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+          <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TeamsNotFounds">
+      <EntityTypeMapping TypeName="omproModel.TeamsNotFound">
+        <MappingFragment StoreEntitySet="TeamsNotFound">
+          <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+          <ScalarProperty Name="TeamId" ColumnName="TeamId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ExchangeMatches">
       <EntityTypeMapping TypeName="omproModel.ExchangeMatch">
         <MappingFragment StoreEntitySet="ExchangeMatches">
+          <ScalarProperty Name="Odds" ColumnName="Odds" />
+          <ScalarProperty Name="Bet" ColumnName="Bet" />
           <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
           <ScalarProperty Name="Time" ColumnName="Time" />
           <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
           <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="DrawOdds" ColumnName="DrawOdds" />
-          <ScalarProperty Name="Team2Odds" ColumnName="Team2Odds" />
-          <ScalarProperty Name="Team1Odds" ColumnName="Team1Odds" />
           <ScalarProperty Name="Team2Name" ColumnName="Team2Name" />
           <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
           <ScalarProperty Name="Team1Name" ColumnName="Team1Name" />
@@ -48,6 +44,28 @@
           <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="MatchId" ColumnName="MatchId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Matches">
+      <EntityTypeMapping TypeName="omproModel.Match">
+        <MappingFragment StoreEntitySet="Matches">
+          <ScalarProperty Name="Odds" ColumnName="Odds" />
+          <ScalarProperty Name="Bet" ColumnName="Bet" />
+          <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
+          <ScalarProperty Name="Time" ColumnName="Time" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Team2Name" ColumnName="Team2Name" />
+          <ScalarProperty Name="Team2Id" ColumnName="Team2Id" />
+          <ScalarProperty Name="Team1Name" ColumnName="Team1Name" />
+          <ScalarProperty Name="Team1Id" ColumnName="Team1Id" />
+          <ScalarProperty Name="CompetitionId" ColumnName="CompetitionId" />
+          <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="MatchId" ColumnName="MatchId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
