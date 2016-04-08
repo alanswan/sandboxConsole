@@ -49,6 +49,7 @@
     <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
   </EntityType>
   <EntityType Name="Match">
     <Key>
@@ -69,5 +70,6 @@
     <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
   </EntityType>
 </Schema>

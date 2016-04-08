@@ -23,6 +23,8 @@ namespace sandboxConsole
             Smar smar = new Smar();
             Betdaq betdaq = new Betdaq(teams, newTeams);
 
+            smar.ReadSmarUKFootball();
+
             betdaq.ReadBetdaqFootball();
            // smar.ReadSmarUKFootball();
 
@@ -53,7 +55,8 @@ namespace sandboxConsole
                     Odds = match.Odds,
                     Date = match.Date,
                     LastUpdated = match.LastUpdated,
-                    Time = match.Time
+                    Time = match.Time,
+                    MoneyInMarket = match.MoneyInMarket
                 });
             }
 
@@ -76,7 +79,8 @@ namespace sandboxConsole
                         Odds = match.Odds,
                         Date = match.Date,
                         LastUpdated = match.LastUpdated,
-                        Time = match.Time
+                        Time = match.Time,
+                        MoneyInMarket = match.MoneyInMarket
                     });
                 }
             }
@@ -89,8 +93,8 @@ namespace sandboxConsole
             
             db.SaveChanges();
 
-
-            //smar.ReadSmarUKFootball();
+            var test = "end";
+            
         }
     }
 }

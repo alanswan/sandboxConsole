@@ -29,7 +29,7 @@ namespace sandboxConsole.Models
         public string Time { get; set; }
         public string Url { get; set; }
         public string MobileUrl { get; set; }
-
+        public decimal MoneyInMarket { get; set; }
     }
 
     public class Team

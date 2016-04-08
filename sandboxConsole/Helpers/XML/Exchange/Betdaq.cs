@@ -86,7 +86,7 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                                 {
                                                     if (layDrawNode.Attributes["NAME"].Value.ToString() == "Lay Draw")
                                                     {
-                                                        Matches.Add(new Models.Match()
+                                                        var match = new Models.Match()
                                                         {
                                                             Id = Convert.ToInt32(matchNode.Attributes["ID"].Value),
                                                             Name = matchNode.Attributes["NAME"].Value.ToString(),
@@ -100,7 +100,13 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                                             Odds = Convert.ToDecimal(layDrawNode.FirstChild?.FirstChild?.Attributes["VALUE"]?.Value),
                                                             Date = Convert.ToDateTime(matchNode.Attributes["DATE"].Value),
                                                             Time = ""
-                                                        });
+                                                        };
+                                                        foreach(XmlNode moneyNode in layDrawNode.FirstChild?.FirstChild?.ChildNodes)
+                                                        {
+                                                            if(moneyNode.Attributes["CURRENCY"].Value == "GBP")
+                                                            match.MoneyInMarket = Convert.ToDecimal(moneyNode.Attributes["VALUE"].Value);
+                                                        }
+                                                        Matches.Add(match);
                                                     }
                                                 }
 
@@ -122,6 +128,11 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                                         Date = Convert.ToDateTime(matchNode.Attributes["DATE"].Value),
                                                         Time = ""
                                                     };
+                                                    foreach (XmlNode moneyNode in teamNode.FirstChild?.FirstChild?.ChildNodes)
+                                                    {
+                                                        if (moneyNode.Attributes["CURRENCY"].Value == "GBP")
+                                                            match.MoneyInMarket = Convert.ToDecimal(moneyNode.Attributes["VALUE"].Value);
+                                                    }
                                                     if (teamNode.Attributes["NAME"].Value.ToString() == "Lay " + teams.First().Name)
                                                     {
                                                         match.Bet = teams.First().Name;

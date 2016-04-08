@@ -30,6 +30,7 @@
     <EntitySetMapping Name="ExchangeMatches">
       <EntityTypeMapping TypeName="omproModel.ExchangeMatch">
         <MappingFragment StoreEntitySet="ExchangeMatches">
+          <ScalarProperty Name="MoneyInMarket" ColumnName="MoneyInMarket" />
           <ScalarProperty Name="Odds" ColumnName="Odds" />
           <ScalarProperty Name="Bet" ColumnName="Bet" />
           <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
@@ -51,6 +52,7 @@
     <EntitySetMapping Name="Matches">
       <EntityTypeMapping TypeName="omproModel.Match">
         <MappingFragment StoreEntitySet="Matches">
+          <ScalarProperty Name="MoneyInMarket" ColumnName="MoneyInMarket" />
           <ScalarProperty Name="Odds" ColumnName="Odds" />
           <ScalarProperty Name="Bet" ColumnName="Bet" />
           <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />

@@ -1,4 +1,5 @@
-﻿using sandboxConsole.Misc;
+﻿using sandboxConsole.Helpers.DataManipulation;
+using sandboxConsole.Misc;
 using sandboxConsole.Models;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace sandboxConsole.Helpers.XML.Exchange
         
         public void ReadSmarUKFootball()
         {
-            XmlDocument doc = new XmlDocument();
+            //XmlDocument doc = new XmlDocument();
             //var webRequest = WebRequest.Create(@"http://odds.smarkets.com/oddsfeed.xml");
 
             //using (var response = webRequest.GetResponse())
@@ -38,20 +39,29 @@ namespace sandboxConsole.Helpers.XML.Exchange
             //}
             //doc.
 
-            using (var client = new WebClient())
+            //using (var client = new WebClient())
+            //{
+            //    var xml = client.DownloadString("http://odds.smarkets.com/oddsfeed.xml");
+            //    using (var strReader = new StringReader(xml))
+            //    using (var reader = XmlReader.Create(strReader))
+            //    {
+
+            //    }
+            //}
+
+            using (WebClient client = new WebClient())
             {
-                var xml = client.DownloadString("http://odds.smarkets.com/oddsfeed.xml");
-                using (var strReader = new StringReader(xml))
-                using (var reader = XmlReader.Create(strReader))
-                {
+                client.Headers[HttpRequestHeader.AcceptEncoding] = "gzip";
+                byte[] data = client.DownloadData("http://odds.smarkets.com/oddsfeed.xml.gz ");
+                byte[] decompress = FileManipulation.Decompress(data);
 
-                }
+                // doc.Load("http://odds.smarkets.com/oddsfeed.xml");
+                XmlDocument doc = new XmlDocument();
+                MemoryStream ms = new MemoryStream(decompress);
+                doc.Load(ms);
+                FootballLogic(doc);
             }
-
-            doc.Load("http://odds.smarkets.com/oddsfeed.xml");
-            
-
-            FootballLogic(doc);
+            //FootballLogic(doc);
             
         }
 
