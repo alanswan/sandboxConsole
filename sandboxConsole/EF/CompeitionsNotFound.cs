@@ -12,9 +12,9 @@ namespace sandboxConsole.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class TeamsNotFound
+    public partial class CompeitionsNotFound
     {
-        public int TeamId { get; set; }
-        public string TeamName { get; set; }
+        public int CompetitionId { get; set; }
+        public string CompetitionName { get; set; }
     }
 }

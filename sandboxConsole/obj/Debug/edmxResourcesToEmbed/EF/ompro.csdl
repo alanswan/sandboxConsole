@@ -50,6 +50,8 @@
     <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Match">
     <Key>
@@ -71,5 +73,7 @@
     <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
     <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

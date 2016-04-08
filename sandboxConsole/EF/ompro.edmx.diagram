@@ -10,6 +10,8 @@
         <EntityTypeShape EntityType="omproModel.TeamsNotFound" Width="1.5" PointX="3.375" PointY="5.75" />
         <EntityTypeShape EntityType="omproModel.ExchangeMatch" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="omproModel.Match" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="omproModel.CompeitionsNotFound" Width="1.5" PointX="5.375" PointY="6.75" />
+        <EntityTypeShape EntityType="omproModel.Competition" Width="1.5" PointX="7.375" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

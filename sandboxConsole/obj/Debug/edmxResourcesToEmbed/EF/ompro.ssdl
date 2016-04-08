@@ -27,6 +27,8 @@
     <Property Name="Bet" Type="varchar" MaxLength="200" />
     <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
     <Property Name="MoneyInMarket" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="URL" Type="varchar" MaxLength="500" />
+    <Property Name="MobileURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Matches">
     <Key>
@@ -48,6 +50,8 @@
     <Property Name="Bet" Type="varchar" MaxLength="200" />
     <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
     <Property Name="MoneyInMarket" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="URL" Type="varchar" MaxLength="500" />
+    <Property Name="MobileURL" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="Teams">
     <Key>

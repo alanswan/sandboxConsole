@@ -1,4 +1,5 @@
-﻿using sandboxConsole.Helpers.DataManipulation;
+﻿using sandboxConsole.EF;
+using sandboxConsole.Helpers.DataManipulation;
 using sandboxConsole.Misc;
 using sandboxConsole.Models;
 using System;
@@ -12,19 +13,11 @@ using System.Xml;
 
 namespace sandboxConsole.Helpers.XML.Exchange
 {
-    public class Smar
+    public class Smar : Company
     {
-        public List<Competition> Competitions;
-        public List<Models.Match> Matches;
-        public List<Team> Teams;
-
-        public Smar()
+        public Smar(List<EF.Team> teams, List<TeamsNotFound> newTeams) : base (teams, newTeams)
         {
-            this.Competitions = new List<Competition>();
-            this.Teams = new List<Team>();
-            this.Matches = new List<Models.Match>();
         }
-        
         public void ReadSmarUKFootball()
         {
             //XmlDocument doc = new XmlDocument();
@@ -72,7 +65,7 @@ namespace sandboxConsole.Helpers.XML.Exchange
             {
                 if(node.Attributes["type"].Value.ToString().ToUpper() == "FOOTBALL MATCH")
                 {
-                    var comp = new Competition()
+                    var comp = new Models.Competition()
                     {
                         Id = 0,
                         Name = node.Attributes["parent"].Value.ToString()
@@ -82,12 +75,12 @@ namespace sandboxConsole.Helpers.XML.Exchange
                     {
                         Id = Convert.ToInt32(node.Attributes["id"].Value),
                         Name = node.Attributes["name"].Value.ToString(),
-                        Bookmaker = Constants.SmarketsName,
-                        BookmakerId = Constants.SmarketsId,
+                        Bookmaker = BookmakersConstants.SmarketsName,
+                        BookmakerId = BookmakersConstants.SmarketsId,
                         Competition = comp,
                         LastUpdated = DateTime.Now,
-                        Team1 = new Team(),
-                        Team2 = new Team(),
+                        Team1 = new Models.Team(),
+                        Team2 = new Models.Team(),
                        // Odds = new Odds(),
                         Date = Convert.ToDateTime(node.Attributes["date"].Value),
                         Time = node.Attributes["time"].Value.ToString(),

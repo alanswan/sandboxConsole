@@ -36,6 +36,14 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework.BulkInsert, Version=6.0.2.8, Culture=neutral, PublicKeyToken=630a17433349cb76, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.BulkInsert-ef6.6.0.2.8\lib\Net45\EntityFramework.BulkInsert.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.MappingAPI, Version=6.1.0.9, Culture=neutral, PublicKeyToken=7ee2e825d201459e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.1.0.9\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
@@ -45,6 +53,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EF\Bookmaker.cs">
+      <DependentUpon>ompro.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\CompeitionsNotFound.cs">
+      <DependentUpon>ompro.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Competition.cs">
       <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\ExchangeMatch.cs">
@@ -84,7 +99,10 @@
       <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DataManipulation\FileManipulation.cs" />
+    <Compile Include="Helpers\Maintenance\CompetitionMaintenance.cs" />
     <Compile Include="Helpers\Maintenance\TeamMaintenance.cs" />
+    <Compile Include="Helpers\XML\Betfred.cs" />
+    <Compile Include="Helpers\XML\Company.cs" />
     <Compile Include="Helpers\XML\Exchange\Betdaq.cs" />
     <Compile Include="Helpers\XML\Exchange\Smar.cs" />
     <Compile Include="Helpers\XML\WH.cs" />

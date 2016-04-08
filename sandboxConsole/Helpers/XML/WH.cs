@@ -11,20 +11,10 @@ using System.Xml;
 
 namespace sandboxConsole.Helpers.XML
 {
-    public class WH
+    public class WH : Company
     {
-        
-        public List<Competition> Competitions;
-        public List<Models.Match> Matches;
-        public List<EF.Team> CurrentTeams;
-        public List<EF.TeamsNotFound> NewTeams;
-
-        public WH(List<EF.Team> teams, List<TeamsNotFound> newTeams) 
+        public WH(List<EF.Team> teams, List<TeamsNotFound> newTeams) :base(teams, newTeams)
         {
-            this.Competitions = new List<Competition>();
-            this.CurrentTeams = teams;
-            this.NewTeams = newTeams;
-            this.Matches = new List<Models.Match>();
         }
         
         public void ReadWHUKFootball()
@@ -63,7 +53,7 @@ namespace sandboxConsole.Helpers.XML
                         foreach (XmlNode compNode in sportNode.ChildNodes)
                         {
                             //store competition ids and names
-                            var comp = new Competition()
+                            var comp = new Models.Competition()
                             {
                                 Id = Convert.ToInt32(compNode.Attributes["id"].Value),
                                 Name = compNode.Attributes["name"].Value.ToString()
@@ -89,8 +79,8 @@ namespace sandboxConsole.Helpers.XML
                                         {
                                             Id = Convert.ToInt32(matchNode.Attributes["id"].Value),
                                             Name = matchNodeName,
-                                            Bookmaker = Constants.WilliamHillName,
-                                            BookmakerId = Constants.WilliamHillId,
+                                            Bookmaker = BookmakersConstants.WilliamHillName,
+                                            BookmakerId = BookmakersConstants.WilliamHillId,
                                             Competition = comp,
                                             LastUpdated = Convert.ToDateTime(matchNode.Attributes["lastUpdateTime"].Value),
                                             Team1 = teamsForMatchFields.First(),

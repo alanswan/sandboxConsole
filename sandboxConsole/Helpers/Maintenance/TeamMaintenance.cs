@@ -12,7 +12,7 @@ namespace sandboxConsole.Helpers.Maintenance
     {
         public static void IsTeamNameRecorded(string teamName, List<EF.TeamsNotFound> newTeams, List<EF.Team> currentTeams)
         {
-            if (!currentTeams.Any(x => x.TeamName == teamName.Trim()) && !newTeams.Any(x => x.TeamName == teamName) && (teamName != "" || teamName != null)) {
+            if (!currentTeams.Any(x => x.TeamName.ToUpper() == teamName.Trim().ToUpper()) && !newTeams.Any(x => x.TeamName.ToUpper() == teamName.ToUpper()) && (teamName != "" || teamName != null)) {
                 newTeams.Add(new EF.TeamsNotFound() { TeamName = teamName });
             }
         }
@@ -25,7 +25,7 @@ namespace sandboxConsole.Helpers.Maintenance
         public static Dictionary<int, string> GetTeam(string name, List<EF.Team> correctTeams)
         {
             name = name.Trim();
-            EF.Team team = correctTeams.FirstOrDefault(x => x.TeamName == name);
+            EF.Team team = correctTeams.FirstOrDefault(x => x.TeamName.ToUpper() == name.ToUpper());
             
             if(team == null)
             {

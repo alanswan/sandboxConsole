@@ -12,6 +12,22 @@
           <Property Name="BookmakerId" Type="int" Nullable="false" />
           <Property Name="BookmakerName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <EntityType Name="CompeitionsNotFound">
+          <Key>
+            <PropertyRef Name="CompetitionId" />
+          </Key>
+          <Property Name="CompetitionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompetitionName" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Competitions">
+          <Key>
+            <PropertyRef Name="CompetitionId" />
+          </Key>
+          <Property Name="CompetitionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompetitionName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="OMCompetitionId" Type="int" Nullable="false" />
+          <Property Name="DefaultName" Type="bit" />
+        </EntityType>
         <EntityType Name="ExchangeMatches">
           <Key>
             <PropertyRef Name="Id" />
@@ -32,6 +48,8 @@
           <Property Name="Bet" Type="varchar" MaxLength="200" />
           <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
           <Property Name="MoneyInMarket" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="URL" Type="varchar" MaxLength="500" />
+          <Property Name="MobileURL" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Matches">
           <Key>
@@ -53,6 +71,8 @@
           <Property Name="Bet" Type="varchar" MaxLength="200" />
           <Property Name="Odds" Type="decimal" Precision="10" Scale="2" />
           <Property Name="MoneyInMarket" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="URL" Type="varchar" MaxLength="500" />
+          <Property Name="MobileURL" Type="varchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="Teams">
           <Key>
@@ -72,6 +92,8 @@
         </EntityType>
         <EntityContainer Name="omproModelStoreContainer">
           <EntitySet Name="Bookmakers" EntityType="Self.Bookmakers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CompeitionsNotFound" EntityType="Self.CompeitionsNotFound" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Competitions" EntityType="Self.Competitions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExchangeMatches" EntityType="Self.ExchangeMatches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Matches" EntityType="Self.Matches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teams" EntityType="Self.Teams" Schema="dbo" store:Type="Tables" />
@@ -94,6 +116,8 @@
           <EntitySet Name="TeamsNotFounds" EntityType="omproModel.TeamsNotFound" />
           <EntitySet Name="ExchangeMatches" EntityType="omproModel.ExchangeMatch" />
           <EntitySet Name="Matches" EntityType="omproModel.Match" />
+          <EntitySet Name="CompeitionsNotFounds" EntityType="omproModel.CompeitionsNotFound" />
+          <EntitySet Name="Competitions" EntityType="omproModel.Competition" />
           </EntityContainer>
         <EntityType Name="Team">
           <Key>
@@ -131,6 +155,8 @@
           <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Match">
           <Key>
@@ -152,6 +178,24 @@
           <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
           <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CompeitionsNotFound">
+          <Key>
+            <PropertyRef Name="CompetitionId" />
+          </Key>
+          <Property Name="CompetitionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Competition">
+          <Key>
+            <PropertyRef Name="CompetitionId" />
+          </Key>
+          <Property Name="CompetitionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OMCompetitionId" Type="Int32" Nullable="false" />
+          <Property Name="DefaultName" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -188,6 +232,8 @@
           <EntitySetMapping Name="ExchangeMatches">
             <EntityTypeMapping TypeName="omproModel.ExchangeMatch">
               <MappingFragment StoreEntitySet="ExchangeMatches">
+                <ScalarProperty Name="MobileURL" ColumnName="MobileURL" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
                 <ScalarProperty Name="MoneyInMarket" ColumnName="MoneyInMarket" />
                 <ScalarProperty Name="Odds" ColumnName="Odds" />
                 <ScalarProperty Name="Bet" ColumnName="Bet" />
@@ -210,6 +256,8 @@
           <EntitySetMapping Name="Matches">
             <EntityTypeMapping TypeName="omproModel.Match">
               <MappingFragment StoreEntitySet="Matches">
+                <ScalarProperty Name="MobileURL" ColumnName="MobileURL" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
                 <ScalarProperty Name="MoneyInMarket" ColumnName="MoneyInMarket" />
                 <ScalarProperty Name="Odds" ColumnName="Odds" />
                 <ScalarProperty Name="Bet" ColumnName="Bet" />
@@ -226,6 +274,24 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="MatchId" ColumnName="MatchId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompeitionsNotFounds">
+            <EntityTypeMapping TypeName="omproModel.CompeitionsNotFound">
+              <MappingFragment StoreEntitySet="CompeitionsNotFound">
+                <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
+                <ScalarProperty Name="CompetitionId" ColumnName="CompetitionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Competitions">
+            <EntityTypeMapping TypeName="omproModel.Competition">
+              <MappingFragment StoreEntitySet="Competitions">
+                <ScalarProperty Name="DefaultName" ColumnName="DefaultName" />
+                <ScalarProperty Name="OMCompetitionId" ColumnName="OMCompetitionId" />
+                <ScalarProperty Name="CompetitionName" ColumnName="CompetitionName" />
+                <ScalarProperty Name="CompetitionId" ColumnName="CompetitionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
