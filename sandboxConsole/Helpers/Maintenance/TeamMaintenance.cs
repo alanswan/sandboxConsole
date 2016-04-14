@@ -12,8 +12,8 @@ namespace sandboxConsole.Helpers.Maintenance
     {
         public static void IsTeamNameRecorded(string teamName, List<EF.TeamsNotFound> newTeams, List<EF.Team> currentTeams)
         {
-            if (!currentTeams.Any(x => x.TeamName.ToUpper() == teamName.Trim().ToUpper()) && !newTeams.Any(x => x.TeamName.ToUpper() == teamName.ToUpper()) && (teamName != "" || teamName != null)) {
-                newTeams.Add(new EF.TeamsNotFound() { TeamName = teamName });
+            if (!currentTeams.Any(x => x.TeamName.ToUpper() == teamName.Trim().ToUpper()) && !newTeams.Any(x => x.TeamName.ToUpper() == teamName.Trim().ToUpper()) && (teamName != "" || teamName != null)) {
+                newTeams.Add(new EF.TeamsNotFound() { TeamName = teamName.Trim() });
             }
         }
 

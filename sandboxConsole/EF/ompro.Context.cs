@@ -30,7 +30,9 @@ namespace sandboxConsole.EF
         public virtual DbSet<TeamsNotFound> TeamsNotFounds { get; set; }
         public virtual DbSet<ExchangeMatch> ExchangeMatches { get; set; }
         public virtual DbSet<Match> Matches { get; set; }
-        public virtual DbSet<CompeitionsNotFound> CompeitionsNotFounds { get; set; }
         public virtual DbSet<Competition> Competitions { get; set; }
+        public virtual DbSet<CompetitionsNotFound> CompetitionsNotFounds { get; set; }
+        public virtual DbSet<Race> Races { get; set; }
+        public virtual DbSet<ExchangeRace> ExchangeRaces { get; set; }
     }
 }

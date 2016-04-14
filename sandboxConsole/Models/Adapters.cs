@@ -11,6 +11,16 @@ namespace sandboxConsole.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public Competition()
+        {
+        }
+
+        public Competition(string name, List<EF.Competition> correctComps)
+        {
+            Dictionary<int, string> teamDict = CompetitionMaintenance.GetCompetition(name, correctComps);
+            this.Id = teamDict.First().Key;
+            this.Name = teamDict.First().Value;
+        }
     }
 
     public class Match
@@ -23,6 +33,23 @@ namespace sandboxConsole.Models
         public Team Team1 { get; set; }
         public Team Team2 { get; set; }
         public string Bet { get; set; }
+        public decimal Odds { get; set; }
+        public DateTime Date { get; set; }
+        public DateTime LastUpdated { get; set; }
+        public string Time { get; set; }
+        public string Url { get; set; }
+        public string MobileUrl { get; set; }
+        public decimal MoneyInMarket { get; set; }
+    }
+
+    public class Race
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Bookmaker { get; set; }
+        public int BookmakerId { get; set; }
+        public Competition Meeting { get; set; }
+        public string Horse { get; set; }
         public decimal Odds { get; set; }
         public DateTime Date { get; set; }
         public DateTime LastUpdated { get; set; }

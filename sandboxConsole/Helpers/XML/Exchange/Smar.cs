@@ -15,7 +15,7 @@ namespace sandboxConsole.Helpers.XML.Exchange
 {
     public class Smar : Company
     {
-        public Smar(List<EF.Team> teams, List<TeamsNotFound> newTeams) : base (teams, newTeams)
+        public Smar(List<EF.Team> teams, List<TeamsNotFound> newTeams, List<EF.Competition> comps, List<EF.CompetitionsNotFound> newComps) : base(teams, newTeams, comps, newComps)
         {
         }
         public void ReadSmarUKFootball()

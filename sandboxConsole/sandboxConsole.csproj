@@ -65,13 +65,16 @@
     <Compile Include="EF\Bookmaker.cs">
       <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\CompeitionsNotFound.cs">
-      <DependentUpon>ompro.tt</DependentUpon>
-    </Compile>
     <Compile Include="EF\Competition.cs">
       <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\CompetitionsNotFound.cs">
+      <DependentUpon>ompro.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\ExchangeMatch.cs">
+      <DependentUpon>ompro.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ExchangeRace.cs">
       <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\Match.cs">
@@ -91,6 +94,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ompro.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EF\Race.cs">
+      <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
     <Compile Include="EF\Team.cs">
       <DependentUpon>ompro.tt</DependentUpon>

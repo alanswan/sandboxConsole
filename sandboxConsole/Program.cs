@@ -11,6 +11,7 @@ using sandboxConsole.Models;
 using System.Transactions;
 using EntityFramework.BulkInsert.Extensions;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace sandboxConsole
 {
@@ -22,16 +23,20 @@ namespace sandboxConsole
             List<EF.Team> teams = db.Teams.ToList();
             List<TeamsNotFound> newTeams = db.TeamsNotFounds.ToList();
 
-            WH wh = new WH(teams, newTeams);
-            //Smar smar = new Smar();
-            Betdaq betdaq = new Betdaq(teams, newTeams);
-            Betfred betfred = new Betfred(teams, newTeams);
+            List<EF.Competition> comps = db.Competitions.ToList();
+            List<CompetitionsNotFound> newComps = db.CompetitionsNotFounds.ToList();
+
+            WH wh = new WH(teams, newTeams, comps, newComps);
+            //Smar smar = new Smar(teams, newTeams, comps, newComps);
+            Betdaq betdaq = new Betdaq(teams, newTeams, comps, newComps);
+            Betfred betfred = new Betfred(teams, newTeams, comps, newComps);
 
             //smar.ReadSmarUKFootball();
+            betdaq.ReadBetdaqHorseRacing();
             betdaq.ReadBetdaqFootball();
             betfred.ReadBetfredFootball();
             // smar.ReadSmarUKFootball();
-
+            wh.ReadHorseRacing();
             wh.ReadWHUKFootball();
             wh.ReadWHEuroFootball();
             wh.ReadWHInternationalFootball();
@@ -91,6 +96,52 @@ namespace sandboxConsole
 
                 db.BulkInsert(bulkMatches);
 
+                var bulkRaces = new List<EF.Race>();
+                foreach (Models.Race race in wh.Races)
+                {
+                    bulkRaces.Add(new EF.Race()
+                    {
+                        RaceId = race.Id,
+                        Name = race.Name,
+                        BookmakerId = race.BookmakerId,
+                        CompetitionId = race.Meeting.Id,
+                        CompetitionName = race.Meeting.Name,
+                        Horse = race.Horse,
+                        Odds = race.Odds,
+                        Date = race.Date,
+                        LastUpdated = race.LastUpdated,
+                        Time = race.Time,
+                        MoneyInMarket = race.MoneyInMarket,
+                        URL = race.Url,
+                        MobileURL = race.MobileUrl
+                    });
+                }
+
+                db.BulkInsert(bulkRaces);
+
+                var bulkExchangeRaces = new List<EF.ExchangeRace>();
+                foreach (Models.Race race in betdaq.Races)
+                {
+                    bulkExchangeRaces.Add(new EF.ExchangeRace()
+                    {
+                        RaceId = race.Id,
+                        Name = race.Name,
+                        BookmakerId = race.BookmakerId,
+                        CompetitionId = race.Meeting.Id,
+                        CompetitionName = race.Meeting.Name,
+                        Horse = race.Horse,
+                        Odds = race.Odds,
+                        Date = race.Date,
+                        LastUpdated = race.LastUpdated,
+                        Time = race.Time,
+                        MoneyInMarket = race.MoneyInMarket,
+                        URL = race.Url,
+                        MobileURL = race.MobileUrl
+                    });
+                }
+
+                db.BulkInsert(bulkExchangeRaces);
+
                 var bulkExchange = new List<ExchangeMatch>();
                 foreach (Models.Match match in betdaq.Matches)
                 {
@@ -125,6 +176,12 @@ namespace sandboxConsole
                     if (!db.TeamsNotFounds.Any(x => x.TeamName == team.TeamName))
                         db.TeamsNotFounds.Add(team);
                 };
+                foreach (EF.CompetitionsNotFound comp in newComps)
+                {
+                    if (!db.CompetitionsNotFounds.Any(x => x.CompetitionName == comp.CompetitionName))
+                        db.CompetitionsNotFounds.Add(comp);
+                };
+
                 db.SaveChanges();
 
             }
@@ -153,6 +210,20 @@ namespace sandboxConsole
                 using (var cmd = sc.CreateCommand())
                 {
                     cmd.CommandText = "DELETE FROM ExchangeMatches WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetdaqId);
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Races WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.WilliamHillId);
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM ExchangeRaces WHERE BookmakerId = @id";
                     cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetdaqId);
                     cmd.ExecuteNonQuery();
                 }

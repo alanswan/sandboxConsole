@@ -14,7 +14,7 @@ namespace sandboxConsole.Helpers.XML.Exchange
     public class Betdaq : Company
     {
         public List<string> BetdaqMatchPhrases;
-        public Betdaq(List<EF.Team> teams, List<TeamsNotFound> newTeams) : base(teams, newTeams)
+        public Betdaq(List<EF.Team> teams, List<TeamsNotFound> newTeams, List<EF.Competition> comps, List<EF.CompetitionsNotFound> newComps) : base(teams, newTeams, comps, newComps)
         {
             // todo - need to get all relevant leagues/internationals and put in leagues for the next few years.
             this.BetdaqMatchPhrases = new List<string>() { "Serie A 2015/2016", "La Liga 2015/16", "Serie A 2016/2017", "La Liga 2016/17", "Champions League Matches", "Europa League Matches", "The Championship", "Premier League", "English League One", "English League Two", "Scottish Premiership 2015/16", "Scottish Premiership 2016/17" };
@@ -157,13 +157,98 @@ namespace sandboxConsole.Helpers.XML.Exchange
                 }
                 
             }
-         
-        
-       
-        
-        
-        
-        
-         
+
+
+        public void ReadBetdaqHorseRacing()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("http://xml.betdaq.com/horseracing");
+
+            XmlNodeList xnList = doc.SelectNodes("/root/SPORT/EVENT");
+
+            foreach (XmlNode node in xnList)
+            {
+                if (node.Attributes["NAME"].Value.ToString().ToUpper() != "ANTE POST")
+                {
+                    foreach (XmlNode eventNode in node.ChildNodes)
+                    {
+                        var compName = GetMeetNameWH(eventNode.Attributes["NAME"].Value.ToString());
+                        CompetitionMaintenance.IsCompetitionRecorded(compName, NewComps, CurrentComps);
+                        Models.Competition comp = new Models.Competition(compName, CurrentComps);
+                        foreach (XmlNode raceNode in eventNode.ChildNodes)
+                        {
+                            foreach (XmlNode marketNode in raceNode.ChildNodes)
+                            {
+                                if (marketNode.Attributes["NAME"].Value.ToString().ToUpper() == "WIN MARKET")
+                                {
+                                    string link = "";
+                                    string mobLink = "";
+                                    foreach (XmlNode linkNode in marketNode.ChildNodes)
+                                    {
+                                        if (linkNode.Name == "LINK")
+                                        {
+                                            link = linkNode.Attributes["URL"].Value.ToString();
+                                            mobLink = linkNode.Attributes["MOBILE_URL"].Value.ToString();
+                                        }
+                                    }
+                                    foreach (XmlNode selectionNode in marketNode.ChildNodes)
+                                    {
+                                        if (selectionNode.Name != "LINK")
+                                        { 
+                                            var name = selectionNode.Attributes["NAME"].Value.ToString();
+                                            name = name.Substring((name.IndexOf(' ') + 1));
+                                            name = name.Substring((name.IndexOf(' ') +1 ));
+                                            
+                                            XmlNode oddsNode = selectionNode.SelectNodes("OUTCOME/ODDS[@POLARITY='LAY']").Item(0).FirstChild;
+                                            decimal moneyInMarket = 0;
+                                            if (oddsNode != null)
+                                            {
+                                                foreach (XmlNode moneyNode in oddsNode.ChildNodes)
+                                                {
+                                                    if (moneyNode.Attributes["CURRENCY"].Value.ToString() == "GBP")
+                                                    {
+                                                        moneyInMarket =
+                                                            Convert.ToDecimal(moneyNode.Attributes["VALUE"].Value);
+                                                    }
+                                                }
+                                            }
+                                            Races.Add(new Models.Race()
+                                            {
+                                                Id = Convert.ToInt32(selectionNode.Attributes["ID"].Value),
+                                                Name = raceNode.Attributes["NAME"].Value.ToString(),
+                                                Bookmaker = BookmakersConstants.BetdaqName,
+                                                BookmakerId = BookmakersConstants.BetdaqId,
+                                                Meeting = comp,
+                                                Horse = name,
+                                                Odds = (oddsNode == null) ? Convert.ToDecimal(0) : Convert.ToDecimal(oddsNode.Attributes["VALUE"].Value),
+                                                Date = Convert.ToDateTime(raceNode.Attributes["DATE"].Value),
+                                                Time = raceNode.Attributes["NAME"].Value.ToString().Substring(0, 5),
+                                                LastUpdated = DateTime.Now,
+                                                Url = link,
+                                                MoneyInMarket = moneyInMarket
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public string GetMeetNameWH(string name)
+        {
+            int l = name.IndexOf("(");
+            if (l > 0)
+            {
+                return name.Substring(0, l);
+            }
+            return name;
+        }
+
+
+
     }
 }

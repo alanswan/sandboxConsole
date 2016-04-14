@@ -15,7 +15,7 @@ namespace sandboxConsole.Helpers.XML
     public class Betfred : Company
     {
         public Dictionary<string, string> BetfredFeeds;
-        public Betfred(List<EF.Team> teams, List<TeamsNotFound> newTeams) : base(teams, newTeams)
+        public Betfred(List<EF.Team> teams, List<TeamsNotFound> newTeams, List<EF.Competition> comps, List<EF.CompetitionsNotFound> newComps) : base(teams, newTeams, comps, newComps)
         {
             this.BetfredFeeds = new Dictionary<string, string>();
             BetfredFeeds.Add(CompetitionConstants.PremierLeague, "Football-Premiership");

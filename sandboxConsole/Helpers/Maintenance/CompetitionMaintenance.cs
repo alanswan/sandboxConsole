@@ -5,16 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using sandboxConsole.EF;
 
 namespace sandboxConsole.Helpers.Maintenance
 {
     public class CompetitionMaintenance
     {
-        public static void IsCompetitionRecorded(string teamName, List<EF.TeamsNotFound> newTeams, List<EF.Team> currentTeams)
+        public static void IsCompetitionRecorded(string competitionName, List<EF.CompetitionsNotFound> newCompetitions, List<EF.Competition> currentCompetitions)
         {
-            //if (!currentTeams.Any(x => x.TeamName.ToUpper() == teamName.Trim().ToUpper()) && !newTeams.Any(x => x.TeamName.ToUpper() == teamName.ToUpper()) && (teamName != "" || teamName != null)) {
-            //    newTeams.Add(new EF.TeamsNotFound() { TeamName = teamName });
-            //}
+            competitionName = competitionName.Trim();
+            if (!currentCompetitions.Any(x => x.CompetitionName.ToUpper() == competitionName.ToUpper()) &&
+                !newCompetitions.Any(x => x.CompetitionName.ToUpper() == competitionName.ToUpper()) &&
+                (competitionName != "" && competitionName != null))
+            {
+                newCompetitions.Add(new CompetitionsNotFound() { CompetitionName = competitionName});
+            }
         }
 
         ///<summary>
@@ -22,33 +27,34 @@ namespace sandboxConsole.Helpers.Maintenance
         ///<para>name : team name from bookmaker data feed </para>
         ///<para>correctteams : List of teams, hopefully from the database, giving teams already recorded</para>
         ///</summary>
-        //public static Dictionary<int, string> GetCompetition(string name, List<EF.Team> correctTeams)
-        //{
-        //    //name = name.Trim();
-        //    //EF.Team team = correctTeams.FirstOrDefault(x => x.TeamName.ToUpper() == name.ToUpper());
-            
-        //    //if(team == null)
-        //    //{
-        //    //    var dict = new Dictionary<int, string>();
-        //    //    dict.Add(999999, name);
-        //    //    return dict;
-        //    //}
+        public static Dictionary<int, string> GetCompetition(string name, List<EF.Competition> correctCompetitions)
+        {
+            name = name.Trim();
+            EF.Competition comp = correctCompetitions.FirstOrDefault(x => x.CompetitionName.ToUpper() == name.ToUpper());
 
-        //    //try {
-        //    //    var correctTeam = correctTeams.Single(x => x.OMTeamId == team.OMTeamId && x.DefaultName == true);
-        //    //    var newDict = new Dictionary<int, string>();
-        //    //    newDict.Add(team.OMTeamId, correctTeam.TeamName);
-        //    //    return newDict;
-        //    //}
-        //    //catch(Exception e )
-        //    //{
-        //    //    //******* TODO - MUST NOTIFY US THAT THIS HAS HAPPENED ***********//
-        //    //    //******* IT MEANS THERE IS AN ENTRY IN OUR TEAMS DATABASE THAT DOESN'T HAVE A DEFAULT NAME ********//
+            if (comp == null)
+            {
+                var dict = new Dictionary<int, string>();
+                dict.Add(999999, name);
+                return dict;
+            }
 
-        //    //    var dict = new Dictionary<int, string>();
-        //    //    dict.Add(999999, name);
-        //    //    return dict;
-        //    //}
-        //}
+            try
+            {
+                var correctComp = correctCompetitions.Single(x => x.OMCompetitionId == comp.OMCompetitionId && x.DefaultName == true);
+                var newDict = new Dictionary<int, string>();
+                newDict.Add(correctComp.OMCompetitionId, correctComp.CompetitionName);
+                return newDict;
+            }
+            catch (Exception e)
+            {
+                //******* TODO - MUST NOTIFY US THAT THIS HAS HAPPENED ***********//
+                //******* IT MEANS THERE IS AN ENTRY IN OUR TEAMS DATABASE THAT DOESN'T HAVE A DEFAULT NAME ********//
+
+                var dict = new Dictionary<int, string>();
+                dict.Add(999999, name);
+                return dict;
+            }
+        }
     }
 }

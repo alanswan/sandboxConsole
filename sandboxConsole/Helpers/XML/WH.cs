@@ -4,6 +4,7 @@ using sandboxConsole.Misc;
 using sandboxConsole.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace sandboxConsole.Helpers.XML
 {
     public class WH : Company
     {
-        public WH(List<EF.Team> teams, List<TeamsNotFound> newTeams) :base(teams, newTeams)
+        public WH(List<EF.Team> teams, List<TeamsNotFound> newTeams, List<EF.Competition> comps, List<EF.CompetitionsNotFound> newComps) :base(teams, newTeams, comps, newComps)
         {
         }
         
@@ -36,6 +37,13 @@ namespace sandboxConsole.Helpers.XML
             XmlDocument doc = new XmlDocument();
             doc.Load("http://cachepricefeeds.williamhill.com/openbet_cdn?action=template&template=getHierarchyByMarketType&classId=275&marketSort=MR&filterBIR=N");
             FootballLogic(doc);
+        }
+
+        public void ReadHorseRacing()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("http://cachepricefeeds.williamhill.com/openbet_cdn?action=template&template=getHierarchyByMarketType&classId=2&marketSort=--&filterBIR=N");
+            HorseRacingLogic(doc);
         }
 
 
@@ -106,7 +114,48 @@ namespace sandboxConsole.Helpers.XML
             }
         }
 
+        public void HorseRacingLogic(XmlDocument doc)
+        {
+            XmlNodeList xnList = doc.SelectNodes("/oxip/response/williamhill/class/type/market");
 
+            foreach (XmlNode marketNode in xnList)
+            {
+                if (marketNode.Attributes["name"].Value.ToString().ToUpper().Contains("WIN"))
+                {
+                    var competitionName = marketNode.ParentNode.Attributes["name"].Value.ToString();
+                    //todo check CompetitionHere
+                    CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                    Models.Competition meeting = new Models.Competition(competitionName, CurrentComps);
+
+                    var time = marketNode.Attributes["time"].Value.ToString();
+                    var name = marketNode.Attributes["name"].Value.ToString();
+
+                    foreach (XmlNode participant in marketNode.ChildNodes)
+                    {
+
+                        Decimal oddsDecimal;
+                        if (Decimal.TryParse(participant.Attributes["oddsDecimal"].Value, out oddsDecimal))
+                        {
+                            Models.Race race = new Models.Race()
+                            {
+                                Id = Convert.ToInt32(participant.Attributes["id"].Value),
+                                Name = marketNode.Attributes["name"].Value.ToString(),
+                                BookmakerId = BookmakersConstants.WilliamHillId,
+                                Bookmaker = BookmakersConstants.WilliamHillName,
+                                Meeting = meeting,
+                                Horse = participant.Attributes["name"].Value.ToString().Trim(),
+                                Odds = oddsDecimal,
+                                Date = Convert.ToDateTime(marketNode.Attributes["date"].Value.ToString()),
+                                Time = marketNode.Attributes["time"].Value.ToString(),
+                                LastUpdated = Convert.ToDateTime(participant.Attributes["lastUpdateDate"].Value),
+                                Url = marketNode.Attributes["url"].Value.ToString()
+                            };
+                            Races.Add(race);
+                        }
+                    }
+                }
+            }
+        }
        
         
 
