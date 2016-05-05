@@ -27,15 +27,20 @@ namespace sandboxConsole
             List<CompetitionsNotFound> newComps = db.CompetitionsNotFounds.ToList();
 
             WH wh = new WH(teams, newTeams, comps, newComps);
-            //Smar smar = new Smar(teams, newTeams, comps, newComps);
+            Smar smar = new Smar(teams, newTeams, comps, newComps);
             Betdaq betdaq = new Betdaq(teams, newTeams, comps, newComps);
             Betfred betfred = new Betfred(teams, newTeams, comps, newComps);
+            Coral coral = new Coral(teams, newTeams, comps, newComps);
+            Eight88 eight = new Eight88(teams, newTeams, comps, newComps);
 
-            //smar.ReadSmarUKFootball();
+            eight.Read888Football();
+
+            smar.ReadSmarUKFootball();
             betdaq.ReadBetdaqHorseRacing();
             betdaq.ReadBetdaqFootball();
+
+            coral.ReadCoralFootball();
             betfred.ReadBetfredFootball();
-            // smar.ReadSmarUKFootball();
             wh.ReadHorseRacing();
             wh.ReadWHUKFootball();
             wh.ReadWHEuroFootball();
@@ -71,6 +76,30 @@ namespace sandboxConsole
                 }
                 
                 foreach (Models.Match match in betfred.Matches)
+                {
+                    bulkMatches.Add(new EF.Match()
+                    {
+                        MatchId = match.Id,
+                        Name = match.Name,
+                        BookmakerId = match.BookmakerId,
+                        CompetitionId = match.Competition.Id,
+                        CompetitionName = match.Competition.Name,
+                        Team1Id = match.Team1.Id,
+                        Team1Name = match.Team1.Name,
+                        Team2Id = match.Team2.Id,
+                        Team2Name = match.Team2.Name,
+                        Bet = match.Bet,
+                        Odds = match.Odds,
+                        Date = match.Date,
+                        LastUpdated = match.LastUpdated,
+                        Time = match.Time,
+                        MoneyInMarket = match.MoneyInMarket,
+                        URL = match.Url,
+                        MobileURL = match.MobileUrl
+                    });
+                }
+
+                foreach (Models.Match match in coral.Matches)
                 {
                     bulkMatches.Add(new EF.Match()
                     {
@@ -139,11 +168,56 @@ namespace sandboxConsole
                         MobileURL = race.MobileUrl
                     });
                 }
+                foreach (Models.Race race in smar.Races)
+                {
+                    bulkExchangeRaces.Add(new EF.ExchangeRace()
+                    {
+                        RaceId = race.Id,
+                        Name = race.Name,
+                        BookmakerId = race.BookmakerId,
+                        CompetitionId = race.Meeting.Id,
+                        CompetitionName = race.Meeting.Name,
+                        Horse = race.Horse,
+                        Odds = race.Odds,
+                        Date = race.Date,
+                        LastUpdated = race.LastUpdated,
+                        Time = race.Time,
+                        MoneyInMarket = race.MoneyInMarket,
+                        URL = race.Url,
+                        MobileURL = race.MobileUrl
+                    });
+                }
 
                 db.BulkInsert(bulkExchangeRaces);
 
                 var bulkExchange = new List<ExchangeMatch>();
                 foreach (Models.Match match in betdaq.Matches)
+                {
+                    if (match.Team1.Name != null)
+                    {
+                        bulkExchange.Add(new ExchangeMatch()
+                        {
+                            MatchId = match.Id,
+                            Name = match.Name,
+                            BookmakerId = match.BookmakerId,
+                            CompetitionId = match.Competition.Id,
+                            CompetitionName = match.Competition.Name,
+                            Team1Id = match.Team1.Id,
+                            Team1Name = match.Team1.Name,
+                            Team2Id = match.Team2.Id,
+                            Team2Name = match.Team2.Name,
+                            Bet = match.Bet,
+                            Odds = match.Odds,
+                            Date = match.Date,
+                            LastUpdated = match.LastUpdated,
+                            Time = match.Time,
+                            MoneyInMarket = match.MoneyInMarket,
+                            URL = match.Url,
+                            MobileURL = match.MobileUrl
+                        });
+                    }
+                }
+                foreach (Models.Match match in smar.Matches)
                 {
                     if (match.Team1.Name != null)
                     {
@@ -204,6 +278,12 @@ namespace sandboxConsole
                 using (var cmd = sc.CreateCommand())
                 {
                     cmd.CommandText = "DELETE FROM Matches WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.CoralId);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Matches WHERE BookmakerId = @id";
                     cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetfredId);
                     cmd.ExecuteNonQuery();
                 }
@@ -211,6 +291,12 @@ namespace sandboxConsole
                 {
                     cmd.CommandText = "DELETE FROM ExchangeMatches WHERE BookmakerId = @id";
                     cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetdaqId);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM ExchangeMatches WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.SmarketsId);
                     cmd.ExecuteNonQuery();
                 }
 
@@ -225,6 +311,13 @@ namespace sandboxConsole
                 {
                     cmd.CommandText = "DELETE FROM ExchangeRaces WHERE BookmakerId = @id";
                     cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetdaqId);
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM ExchangeRaces WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.SmarketsId);
                     cmd.ExecuteNonQuery();
                 }
             }

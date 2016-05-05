@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -53,58 +54,62 @@ namespace sandboxConsole.Helpers.XML
             {
                 if (node.Name == "response")
                 {
-                    foreach (XmlNode responseNode in doc.DocumentElement.ChildNodes)
-                    {
-                        var bookNode = responseNode.SelectSingleNode("williamhill");
-                        var sportNode = bookNode?.SelectSingleNode("class");
-
-                        foreach (XmlNode compNode in sportNode.ChildNodes)
+                    //if error thrown, don't continue - i.e no data returned
+                    if(node.Attributes["code"].Value.ToString() != "100") { 
+                        foreach (XmlNode responseNode in doc.DocumentElement.ChildNodes)
                         {
-                            //store competition ids and names
-                            var comp = new Models.Competition()
-                            {
-                                Id = Convert.ToInt32(compNode.Attributes["id"].Value),
-                                Name = compNode.Attributes["name"].Value.ToString()
-                            };
-                            if (!Competitions.Any(x => x.Id == comp.Id)) { Competitions.Add(comp); }
+                            var bookNode = responseNode.SelectSingleNode("williamhill");
+                            var sportNode = bookNode?.SelectSingleNode("class");
 
-                            foreach (XmlNode matchNode in compNode.ChildNodes)
+                            foreach (XmlNode compNode in sportNode.ChildNodes)
                             {
-                                var matchNodeName = matchNode.Attributes["name"].Value.ToString();
-                                if (matchNodeName.Contains("Match Betting"))
+                                //store competition ids and names
+                                var competitionName = compNode.Attributes["name"].Value.ToString();
+                                CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                                Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
+
+                                foreach (XmlNode matchNode in compNode.ChildNodes)
                                 {
-                                    List<Models.Team> teamsForMatchFields = new List<Models.Team>();
-                                    foreach (XmlNode parNode in matchNode.ChildNodes)
+                                    var matchNodeName = matchNode.Attributes["name"].Value.ToString();
+                                    if (matchNodeName.Contains("Match Betting"))
                                     {
-                                        TeamMaintenance.IsTeamNameRecorded(parNode.Attributes["name"].Value.ToString(), NewTeams, CurrentTeams);
-                                        var team = new Models.Team(parNode.Attributes["name"].Value.ToString(), CurrentTeams);
-                                        if(team.Name != "Draw")
-                                            teamsForMatchFields.Add(team);
-                                    }
-                                    foreach (XmlNode parNode in matchNode.ChildNodes)
-                                    {
-                                        var match = new Models.Match()
+                                        List<Models.Team> teamsForMatchFields = new List<Models.Team>();
+                                        foreach (XmlNode parNode in matchNode.ChildNodes)
                                         {
-                                            Id = Convert.ToInt32(matchNode.Attributes["id"].Value),
-                                            Name = matchNodeName,
-                                            Bookmaker = BookmakersConstants.WilliamHillName,
-                                            BookmakerId = BookmakersConstants.WilliamHillId,
-                                            Competition = comp,
-                                            LastUpdated = Convert.ToDateTime(matchNode.Attributes["lastUpdateTime"].Value),
-                                            Team1 = teamsForMatchFields.First(),
-                                            Team2 = teamsForMatchFields.Last(),
-                                            Date = Convert.ToDateTime(matchNode.Attributes["date"].Value),
-                                            Time = matchNode.Attributes["time"].Value.ToString()
-                                        };
-                                        //store team if not already there
-                                        
-                                        var team = new Models.Team(parNode.Attributes["name"].Value.ToString(), CurrentTeams);
-                                        match.Bet = team.Name;
-                                        match.Odds = Convert.ToDecimal(parNode.Attributes["oddsDecimal"].Value);
-                                        
-                                        Matches.Add(match);
+                                            TeamMaintenance.IsTeamNameRecorded(parNode.Attributes["name"].Value.ToString(),
+                                                NewTeams, CurrentTeams);
+                                            var team = new Models.Team(parNode.Attributes["name"].Value.ToString(),
+                                                CurrentTeams);
+                                            if (team.Name != "Draw")
+                                                teamsForMatchFields.Add(team);
+                                        }
+                                        foreach (XmlNode parNode in matchNode.ChildNodes)
+                                        {
+                                            var match = new Models.Match()
+                                            {
+                                                Id = Convert.ToInt32(matchNode.Attributes["id"].Value),
+                                                Name = matchNodeName,
+                                                Bookmaker = BookmakersConstants.WilliamHillName,
+                                                BookmakerId = BookmakersConstants.WilliamHillId,
+                                                Competition = comp,
+                                                LastUpdated =
+                                                    Convert.ToDateTime(matchNode.Attributes["lastUpdateTime"].Value),
+                                                Team1 = teamsForMatchFields.First(),
+                                                Team2 = teamsForMatchFields.Last(),
+                                                Date = Convert.ToDateTime(matchNode.Attributes["date"].Value),
+                                                Time = matchNode.Attributes["time"].Value.ToString()
+                                            };
+                                            //store team if not already there
+
+                                            var team = new Models.Team(parNode.Attributes["name"].Value.ToString(),
+                                                CurrentTeams);
+                                            match.Bet = team.Name;
+                                            match.Odds = Convert.ToDecimal(parNode.Attributes["oddsDecimal"].Value);
+
+                                            Matches.Add(match);
+                                        }
+
                                     }
-                                    
                                 }
                             }
 

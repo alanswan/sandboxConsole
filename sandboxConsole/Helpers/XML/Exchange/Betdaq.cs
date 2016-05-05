@@ -26,14 +26,12 @@ namespace sandboxConsole.Helpers.XML.Exchange
             XmlNode node = doc.SelectSingleNode("root").SelectSingleNode("SPORT");
             foreach(XmlNode compNode in node.ChildNodes)
             {
-                var comp = new Models.Competition()
-                {
-                    Id = Convert.ToInt32(compNode.Attributes["ID"].Value),
-                    Name = compNode.Attributes["NAME"].Value.ToString()
-                };
-                Competitions.Add(comp);
+                //store competition ids and names
+                var competitionName = compNode.Attributes["NAME"].Value.ToString();
+                CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
 
-                foreach(XmlNode groupNode in compNode.ChildNodes)
+                foreach (XmlNode groupNode in compNode.ChildNodes)
                 {
                     var groupName = groupNode.Attributes["NAME"].Value.ToString().Trim();
                     if (BetdaqMatchPhrases.Contains(groupName))

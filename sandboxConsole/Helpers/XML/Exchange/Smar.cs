@@ -1,5 +1,6 @@
 ﻿using sandboxConsole.EF;
 using sandboxConsole.Helpers.DataManipulation;
+using sandboxConsole.Helpers.Maintenance;
 using sandboxConsole.Misc;
 using sandboxConsole.Models;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -20,28 +22,6 @@ namespace sandboxConsole.Helpers.XML.Exchange
         }
         public void ReadSmarUKFootball()
         {
-            //XmlDocument doc = new XmlDocument();
-            //var webRequest = WebRequest.Create(@"http://odds.smarkets.com/oddsfeed.xml");
-
-            //using (var response = webRequest.GetResponse())
-            //using (var content = response.GetResponseStream())
-            //using (var reader = new StreamReader(content))
-            //{
-            //    var strContent = reader.ReadToEnd();
-            //    var test = "";
-            //}
-            //doc.
-
-            //using (var client = new WebClient())
-            //{
-            //    var xml = client.DownloadString("http://odds.smarkets.com/oddsfeed.xml");
-            //    using (var strReader = new StringReader(xml))
-            //    using (var reader = XmlReader.Create(strReader))
-            //    {
-
-            //    }
-            //}
-
             using (WebClient client = new WebClient())
             {
                 client.Headers[HttpRequestHeader.AcceptEncoding] = "gzip";
@@ -52,79 +32,98 @@ namespace sandboxConsole.Helpers.XML.Exchange
                 XmlDocument doc = new XmlDocument();
                 MemoryStream ms = new MemoryStream(decompress);
                 doc.Load(ms);
-                FootballLogic(doc);
+                AllLogic(doc);
             }
-            //FootballLogic(doc);
-            
         }
 
-        public void FootballLogic(XmlDocument doc)
+        public void AllLogic(XmlDocument doc)
         {
-            
             foreach(XmlNode node in doc.SelectSingleNode("odds").ChildNodes)
             {
                 if(node.Attributes["type"].Value.ToString().ToUpper() == "FOOTBALL MATCH")
                 {
-                    var comp = new Models.Competition()
-                    {
-                        Id = 0,
-                        Name = node.Attributes["parent"].Value.ToString()
-                    };
-
-                    var match = new Models.Match()
-                    {
-                        Id = Convert.ToInt32(node.Attributes["id"].Value),
-                        Name = node.Attributes["name"].Value.ToString(),
-                        Bookmaker = BookmakersConstants.SmarketsName,
-                        BookmakerId = BookmakersConstants.SmarketsId,
-                        Competition = comp,
-                        LastUpdated = DateTime.Now,
-                        Team1 = new Models.Team(),
-                        Team2 = new Models.Team(),
-                       // Odds = new Odds(),
-                        Date = Convert.ToDateTime(node.Attributes["date"].Value),
-                        Time = node.Attributes["time"].Value.ToString(),
-                        Url = node.Attributes["url"].Value.ToString()
-                    };
+                    var competitionName = node.Attributes["parent"].Value.ToString();
+                    CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                    Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
+                    
                     foreach (XmlNode matchNode in node.ChildNodes)
                     {
                         
                         if (matchNode.Attributes["slug"].Value.ToString() == "winner")
                         {
-                            foreach (XmlNode winnerNode in matchNode.ChildNodes)
+                            List<Models.Team> teamsForMatchFields = new List<Models.Team>();
+                            foreach (XmlNode contractNode in matchNode.ChildNodes)
                             {
-                                var teamName = winnerNode.Attributes["name"].Value.ToString();
-                                var teamId = Convert.ToInt32(winnerNode.Attributes["id"].Value);
-                                var homeaway = winnerNode.Attributes["slug"].Value.ToString();
-
-                                XmlNode bidsNode = winnerNode.SelectSingleNode("bids").FirstChild;
-                                if (bidsNode != null)
+                                var teamname = contractNode.Attributes["name"].Value.ToString();
+                                if (teamname.ToLower() != "draw")
                                 {
-                                    var odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value);
-                                    //_________________________________________________________________
-                                    // Commeted out due to data structure change
-                                    //if (homeaway == "home")
-                                    //{
-                                    //    match.Team1.Id = teamId;
-                                    //    match.Team1.Name = teamName;
-                                    //    match.Odds.Team1 = odds;
-                                    //}
-                                    //else if (homeaway == "away")
-                                    //{
-                                    //    match.Team2.Id = teamId;
-                                    //    match.Team2.Name = teamName;
-                                    //    match.Odds.Team2 = odds;
-                                    //}
-                                    //else
-                                    //{
-                                    //    match.Odds.Draw = odds;
-                                    //}
-                                    //________________________________________________________
+                                    TeamMaintenance.IsTeamNameRecorded(teamname, NewTeams, CurrentTeams);
+                                    var team = new Models.Team(teamname, CurrentTeams);
+                                    teamsForMatchFields.Add(team);
                                 }
+                            }
+                            foreach (XmlNode contractNode in matchNode.ChildNodes)
+                            {
+                                XmlNode bidsNode = contractNode.SelectSingleNode("bids").FirstChild;
+                                if (bidsNode != null && teamsForMatchFields.Count() > 1)
+                                {
+                                    var match = new Models.Match()
+                                    {
+                                        Id = Convert.ToInt32(node.Attributes["id"].Value),
+                                        Name = node.Attributes["name"].Value.ToString(),
+                                        Bookmaker = BookmakersConstants.SmarketsName,
+                                        BookmakerId = BookmakersConstants.SmarketsId,
+                                        Competition = comp,
+                                        LastUpdated = DateTime.Now,
+                                        Team1 = teamsForMatchFields.First(),
+                                        Team2 = teamsForMatchFields.Last(),
+                                        Date = Convert.ToDateTime(node.Attributes["date"].Value),
+                                        Time = node.Attributes["time"].Value.ToString(),
+                                        Url = node.Attributes["url"].Value.ToString(),
+                                        Bet = contractNode.Attributes["name"].Value.ToString(),
+                                        Odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value)
+                                    };
+                                    Matches.Add(match);
+                                }
+                                    
                             }
                         }
                     }
-                    Matches.Add(match);
+                }
+                if (node.Attributes["type"].Value.ToString().ToUpper() == "HORSE RACING RACE")
+                {
+                    var competitionName = node.Attributes["parent"].Value.ToString();
+                    CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                    Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
+                    foreach (XmlNode marketNode in node.ChildNodes)
+                    {
+                        if (marketNode.Attributes["slug"].Value.ToString() == "to-win")
+                        {
+                            foreach (XmlNode contractNode in marketNode.ChildNodes)
+                            {
+                                XmlNode bidsNode = contractNode.SelectSingleNode("bids").FirstChild;
+                                if (bidsNode != null)
+                                {
+                                    var race = new Models.Race()
+                                    {
+                                        Id = Convert.ToInt32(node.Attributes["id"].Value),
+                                        Name = node.Attributes["name"].Value.ToString() + " " + comp.Name,
+                                        Bookmaker = BookmakersConstants.SmarketsName,
+                                        BookmakerId = BookmakersConstants.SmarketsId,
+                                        Horse = contractNode.Attributes["name"].Value.ToString(),
+                                        Meeting = comp,
+                                        LastUpdated = DateTime.Now,
+                                        Date = Convert.ToDateTime(node.Attributes["date"].Value),
+                                        Time = node.Attributes["time"].Value.ToString(),
+                                        Url = node.Attributes["url"].Value.ToString(),
+                                        Odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value)
+                                    };
+                                    Races.Add(race);
+                                }
+
+                            }
+                        }
+                    }
                 }
             }
         }

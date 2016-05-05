@@ -16,8 +16,11 @@ namespace sandboxConsole.Misc
         public static string SmarketsName = "Smarkets";
 
 
+        public const int CoralId = 103;
         public const int BetfredId = 102;
         public const int WilliamHillId = 101;
+
+        public static string CoralName = "Coral";
         public static string BetfredName = "Betfred";
         public static string WilliamHillName = "William Hill";
     }

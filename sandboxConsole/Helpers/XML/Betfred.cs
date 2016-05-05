@@ -56,11 +56,10 @@ namespace sandboxConsole.Helpers.XML
             {
                 XmlDocument doc = new XmlDocument();
                 doc.Load("http://xml.betfred.com/" + feed.Value + ".xml");
-                Models.Competition comp = new Models.Competition()
-                {
-                    Id = 999999,
-                    Name = feed.Key
-                };
+                //store competition ids and names
+                var competitionName = feed.Key;
+                CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
                 FootballLogic(doc, comp);
             }
             
