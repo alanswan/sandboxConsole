@@ -23,7 +23,7 @@ namespace sandboxConsole.Helpers.XML
         {
             using (WebClient wc = new WebClient())
             {
-                var json = wc.DownloadString("http://www.smart-feeds.com/getfeeds.aspx?Param=event/group/1000093656");
+                var json = wc.DownloadString("http://www.smart-feeds.com/getfeeds.aspx?Param=betoffer/group/1000094985");
             }
             
         }

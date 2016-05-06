@@ -47,11 +47,6 @@ namespace sandboxConsole.Helpers.XML
 
         public void ReadBetfredFootball()
         {
-            ReadChampionshipFootball();
-        }
-
-        public void ReadChampionshipFootball()
-        {
             foreach (var feed in BetfredFeeds)
             {
                 XmlDocument doc = new XmlDocument();
@@ -62,12 +57,44 @@ namespace sandboxConsole.Helpers.XML
                 Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
                 FootballLogic(doc, comp);
             }
-            
         }
 
+        public void ReadBetfredHorseRacing()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("http://xml.betfred.com/Horse-Racing-Daily.xml");
+            //category/event
+            XmlNodeList xnList = doc.SelectNodes("/category/event/bettype/bet[@price!='SP']");
+            foreach (XmlNode betNode in xnList)
+            {
+                var competitionName = betNode.ParentNode.ParentNode.Attributes["meeting"].Value.ToString();
+                CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
+
+                string time = betNode.ParentNode.ParentNode.Attributes["time"].Value.ToString();
+                string correctTime = (time.Contains(':')) ? time : time.Insert(2, ":");
+
+                Models.Race race = new Models.Race()
+                {
+                    Id = Convert.ToInt32(Convert.ToDecimal(betNode.Attributes["id"].Value)),
+                    Name = correctTime + " " + betNode.ParentNode.ParentNode.Attributes["meeting"].Value.ToString(),
+                    BookmakerId = BookmakersConstants.BetfredId,
+                    Bookmaker = BookmakersConstants.BetfredName,
+                    Meeting = comp,
+                    Horse = betNode.Attributes["name"].Value.ToString().Trim(),
+                    Odds = Convert.ToDecimal(betNode.Attributes["priceDecimal"].Value),
+                    Date = DateTime.ParseExact(betNode.ParentNode.ParentNode.Attributes["date"].Value, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None),
+                    Time = correctTime,
+                    LastUpdated = DateTime.Now,
+                    //Url = marketNode.Attributes["url"].Value.ToString()
+                };
+                Races.Add(race);
+
+            }
+        }
+        
         public void FootballLogic(XmlDocument doc, Models.Competition comp)
         {
-            
             XmlNodeList xnList = doc.SelectNodes("/category/event/bettype[@name='Match Result']");
             foreach(XmlNode eventNode in xnList)
             {
@@ -81,7 +108,7 @@ namespace sandboxConsole.Helpers.XML
                 }
                 foreach (XmlNode betNode in eventNode.ChildNodes)
                 {
-                    String time = eventNode.ParentNode.Attributes["time"].Value.ToString();
+                    string time = eventNode.ParentNode.Attributes["time"].Value.ToString();
                     string correctTime = (time.Contains(':')) ? time : time.Insert(2, ":");
                     var team = new Models.Team(betNode.Attributes["name"].Value.ToString(), CurrentTeams);
                     Models.Match match = new Models.Match()
@@ -125,5 +152,7 @@ namespace sandboxConsole.Helpers.XML
             //    }
             //}
         }
+
+        
     }
 }

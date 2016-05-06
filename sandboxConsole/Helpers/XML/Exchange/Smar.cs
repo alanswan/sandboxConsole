@@ -81,7 +81,8 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                         Time = node.Attributes["time"].Value.ToString(),
                                         Url = node.Attributes["url"].Value.ToString(),
                                         Bet = contractNode.Attributes["name"].Value.ToString(),
-                                        Odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value)
+                                        Odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value),
+                                        MoneyInMarket = Convert.ToDecimal(bidsNode.Attributes["backers_stake"].Value)
                                     };
                                     Matches.Add(match);
                                 }
@@ -116,7 +117,8 @@ namespace sandboxConsole.Helpers.XML.Exchange
                                         Date = Convert.ToDateTime(node.Attributes["date"].Value),
                                         Time = node.Attributes["time"].Value.ToString(),
                                         Url = node.Attributes["url"].Value.ToString(),
-                                        Odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value)
+                                        Odds = Convert.ToDecimal(bidsNode.Attributes["decimal"].Value),
+                                        MoneyInMarket = Convert.ToDecimal(bidsNode.Attributes["backers_stake"].Value)
                                     };
                                     Races.Add(race);
                                 }

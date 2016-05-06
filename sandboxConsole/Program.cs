@@ -33,14 +33,19 @@ namespace sandboxConsole
             Coral coral = new Coral(teams, newTeams, comps, newComps);
             Eight88 eight = new Eight88(teams, newTeams, comps, newComps);
 
+            smar.ReadSmarUKFootball();
+
+            coral.ReadHorseRacing();
             eight.Read888Football();
 
-            smar.ReadSmarUKFootball();
+            
             betdaq.ReadBetdaqHorseRacing();
             betdaq.ReadBetdaqFootball();
 
             coral.ReadCoralFootball();
             betfred.ReadBetfredFootball();
+            betfred.ReadBetfredHorseRacing();
+
             wh.ReadHorseRacing();
             wh.ReadWHUKFootball();
             wh.ReadWHEuroFootball();
@@ -127,6 +132,44 @@ namespace sandboxConsole
 
                 var bulkRaces = new List<EF.Race>();
                 foreach (Models.Race race in wh.Races)
+                {
+                    bulkRaces.Add(new EF.Race()
+                    {
+                        RaceId = race.Id,
+                        Name = race.Name,
+                        BookmakerId = race.BookmakerId,
+                        CompetitionId = race.Meeting.Id,
+                        CompetitionName = race.Meeting.Name,
+                        Horse = race.Horse,
+                        Odds = race.Odds,
+                        Date = race.Date,
+                        LastUpdated = race.LastUpdated,
+                        Time = race.Time,
+                        MoneyInMarket = race.MoneyInMarket,
+                        URL = race.Url,
+                        MobileURL = race.MobileUrl
+                    });
+                }
+                foreach (Models.Race race in betfred.Races)
+                {
+                    bulkRaces.Add(new EF.Race()
+                    {
+                        RaceId = race.Id,
+                        Name = race.Name,
+                        BookmakerId = race.BookmakerId,
+                        CompetitionId = race.Meeting.Id,
+                        CompetitionName = race.Meeting.Name,
+                        Horse = race.Horse,
+                        Odds = race.Odds,
+                        Date = race.Date,
+                        LastUpdated = race.LastUpdated,
+                        Time = race.Time,
+                        MoneyInMarket = race.MoneyInMarket,
+                        URL = race.Url,
+                        MobileURL = race.MobileUrl
+                    });
+                }
+                foreach (Models.Race race in coral.Races)
                 {
                     bulkRaces.Add(new EF.Race()
                     {
@@ -304,6 +347,18 @@ namespace sandboxConsole
                 {
                     cmd.CommandText = "DELETE FROM Races WHERE BookmakerId = @id";
                     cmd.Parameters.AddWithValue("@id", BookmakersConstants.WilliamHillId);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Races WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.CoralId);
+                    cmd.ExecuteNonQuery();
+                }
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Races WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetfredId);
                     cmd.ExecuteNonQuery();
                 }
 

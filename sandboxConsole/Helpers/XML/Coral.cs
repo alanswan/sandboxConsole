@@ -82,7 +82,53 @@ namespace sandboxConsole.Helpers.XML
             }
         }
 
+        public void ReadHorseRacing()
+        {
+            //return events files
+            XmlDocument doc = new XmlDocument();
+            doc.Load("http://xmlfeeds.coral.co.uk/oxi/pub?template=getEventsByClass&class=223");
+            XmlNodeList xnList = doc.SelectNodes("/oxip/response/class/type/event");
+            foreach (XmlNode eventNode in xnList)
+            {
+                var id = eventNode.Attributes["id"].Value.ToString();
+                var url = ("http://xmlfeeds.coral.co.uk/oxi/pub?template=getEventDetails&event=" + id);
 
-        
+                var competitionName = eventNode.ParentNode.Attributes["name"].Value.ToString();
+                CompetitionMaintenance.IsCompetitionRecorded(competitionName, NewComps, CurrentComps);
+                Models.Competition comp = new Models.Competition(competitionName, CurrentComps);
+                ReadHorseRacingEvent(url, comp);
+            }
+        }
+
+        public void ReadHorseRacingEvent(string url, Models.Competition comp)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(url);
+            XmlNodeList xnList = doc.SelectNodes("/oxip/response/event/market[@name = 'Win or Each Way']/outcome");
+
+            foreach (XmlNode outcomeNode in xnList)
+            {
+                if (outcomeNode.Attributes["oddsDecimal"].Value.ToString() != "SP")
+                {
+                    var test = outcomeNode;
+                    Models.Race race = new Models.Race()
+                    {
+                        Id = Convert.ToInt32(outcomeNode.Attributes["id"].Value),
+                        Name = outcomeNode.ParentNode.ParentNode.Attributes["name"].Value.ToString(),
+                        BookmakerId = BookmakersConstants.CoralId,
+                        Bookmaker = BookmakersConstants.CoralName,
+                        Meeting = comp,
+                        Horse = outcomeNode.Attributes["name"].Value.ToString().Trim(),
+                        Odds = Convert.ToDecimal(outcomeNode.Attributes["oddsDecimal"].Value),
+                        Date = Convert.ToDateTime(outcomeNode.ParentNode.ParentNode.Attributes["date"].Value),
+                        Time = outcomeNode.ParentNode.ParentNode.Attributes["time"].Value.ToString().Substring(0, 5),
+                        LastUpdated = DateTime.Now,
+                        Url = outcomeNode.ParentNode.ParentNode.Attributes["url"].Value.ToString()
+                    };
+                    Races.Add(race);
+                }
+            }
+        }
+
     }
 }
