@@ -32,7 +32,9 @@ namespace sandboxConsole
             Betfred betfred = new Betfred(teams, newTeams, comps, newComps);
             Coral coral = new Coral(teams, newTeams, comps, newComps);
             Eight88 eight = new Eight88(teams, newTeams, comps, newComps);
+            Betfair betfair = new Betfair(teams, newTeams, comps, newComps);
 
+            
             smar.ReadSmarUKFootball();
 
             coral.ReadHorseRacing();
@@ -58,74 +60,83 @@ namespace sandboxConsole
                 var bulkMatches = new List<EF.Match>();
                 foreach (Models.Match match in wh.Matches)
                 {
-                    bulkMatches.Add(new EF.Match()
+                    if (match.Team1.Name != null && match.Team1.Id != 999999)
                     {
-                        MatchId = match.Id,
-                        Name = match.Name,
-                        BookmakerId = match.BookmakerId,
-                        CompetitionId = match.Competition.Id,
-                        CompetitionName = match.Competition.Name,
-                        Team1Id = match.Team1.Id,
-                        Team1Name = match.Team1.Name,
-                        Team2Id = match.Team2.Id,
-                        Team2Name = match.Team2.Name,
-                        Bet = match.Bet,
-                        Odds = match.Odds,
-                        Date = match.Date,
-                        LastUpdated = match.LastUpdated,
-                        Time = match.Time,
-                        MoneyInMarket = match.MoneyInMarket,
-                        URL = match.Url,
-                        MobileURL = match.MobileUrl
-                    });
+                        bulkMatches.Add(new EF.Match()
+                        {
+                            MatchId = match.Id,
+                            Name = match.Name,
+                            BookmakerId = match.BookmakerId,
+                            CompetitionId = match.Competition.Id,
+                            CompetitionName = match.Competition.Name,
+                            Team1Id = match.Team1.Id,
+                            Team1Name = match.Team1.Name,
+                            Team2Id = match.Team2.Id,
+                            Team2Name = match.Team2.Name,
+                            Bet = match.Bet,
+                            Odds = match.Odds,
+                            Date = match.Date,
+                            LastUpdated = match.LastUpdated,
+                            Time = match.Time,
+                            MoneyInMarket = match.MoneyInMarket,
+                            URL = match.Url,
+                            MobileURL = match.MobileUrl
+                        });
+                    }
                 }
                 
                 foreach (Models.Match match in betfred.Matches)
                 {
-                    bulkMatches.Add(new EF.Match()
+                    if (match.Team1.Name != null && match.Team1.Id != 999999)
                     {
-                        MatchId = match.Id,
-                        Name = match.Name,
-                        BookmakerId = match.BookmakerId,
-                        CompetitionId = match.Competition.Id,
-                        CompetitionName = match.Competition.Name,
-                        Team1Id = match.Team1.Id,
-                        Team1Name = match.Team1.Name,
-                        Team2Id = match.Team2.Id,
-                        Team2Name = match.Team2.Name,
-                        Bet = match.Bet,
-                        Odds = match.Odds,
-                        Date = match.Date,
-                        LastUpdated = match.LastUpdated,
-                        Time = match.Time,
-                        MoneyInMarket = match.MoneyInMarket,
-                        URL = match.Url,
-                        MobileURL = match.MobileUrl
-                    });
+                        bulkMatches.Add(new EF.Match()
+                        {
+                            MatchId = match.Id,
+                            Name = match.Name,
+                            BookmakerId = match.BookmakerId,
+                            CompetitionId = match.Competition.Id,
+                            CompetitionName = match.Competition.Name,
+                            Team1Id = match.Team1.Id,
+                            Team1Name = match.Team1.Name,
+                            Team2Id = match.Team2.Id,
+                            Team2Name = match.Team2.Name,
+                            Bet = match.Bet,
+                            Odds = match.Odds,
+                            Date = match.Date,
+                            LastUpdated = match.LastUpdated,
+                            Time = match.Time,
+                            MoneyInMarket = match.MoneyInMarket,
+                            URL = match.Url,
+                            MobileURL = match.MobileUrl
+                        });
+                    }
                 }
 
                 foreach (Models.Match match in coral.Matches)
                 {
-                    bulkMatches.Add(new EF.Match()
+                    if (match.Team1.Name != null && match.Team1.Id != 999999)
                     {
-                        MatchId = match.Id,
-                        Name = match.Name,
-                        BookmakerId = match.BookmakerId,
-                        CompetitionId = match.Competition.Id,
-                        CompetitionName = match.Competition.Name,
-                        Team1Id = match.Team1.Id,
-                        Team1Name = match.Team1.Name,
-                        Team2Id = match.Team2.Id,
-                        Team2Name = match.Team2.Name,
-                        Bet = match.Bet,
-                        Odds = match.Odds,
-                        Date = match.Date,
-                        LastUpdated = match.LastUpdated,
-                        Time = match.Time,
-                        MoneyInMarket = match.MoneyInMarket,
-                        URL = match.Url,
-                        MobileURL = match.MobileUrl
-                    });
+                        bulkMatches.Add(new EF.Match()
+                        {
+                            MatchId = match.Id,
+                            Name = match.Name,
+                            BookmakerId = match.BookmakerId,
+                            CompetitionId = match.Competition.Id,
+                            CompetitionName = match.Competition.Name,
+                            Team1Id = match.Team1.Id,
+                            Team1Name = match.Team1.Name,
+                            Team2Id = match.Team2.Id,
+                            Team2Name = match.Team2.Name,
+                            Bet = match.Bet,
+                            Odds = match.Odds,
+                            Date = match.Date,
+                            LastUpdated = match.LastUpdated,
+                            Time = match.Time,
+                            MoneyInMarket = match.MoneyInMarket,
+                            URL = match.Url,
+                            MobileURL = match.MobileUrl
+                        });
+                    }
                 }
 
                 db.BulkInsert(bulkMatches);
@@ -213,22 +224,22 @@ namespace sandboxConsole
                 }
                 foreach (Models.Race race in smar.Races)
                 {
-                    bulkExchangeRaces.Add(new EF.ExchangeRace()
-                    {
-                        RaceId = race.Id,
-                        Name = race.Name,
-                        BookmakerId = race.BookmakerId,
-                        CompetitionId = race.Meeting.Id,
-                        CompetitionName = race.Meeting.Name,
-                        Horse = race.Horse,
-                        Odds = race.Odds,
-                        Date = race.Date,
-                        LastUpdated = race.LastUpdated,
-                        Time = race.Time,
-                        MoneyInMarket = race.MoneyInMarket,
-                        URL = race.Url,
-                        MobileURL = race.MobileUrl
-                    });
+                        bulkExchangeRaces.Add(new EF.ExchangeRace()
+                        {
+                            RaceId = race.Id,
+                            Name = race.Name,
+                            BookmakerId = race.BookmakerId,
+                            CompetitionId = race.Meeting.Id,
+                            CompetitionName = race.Meeting.Name,
+                            Horse = race.Horse,
+                            Odds = race.Odds,
+                            Date = race.Date,
+                            LastUpdated = race.LastUpdated,
+                            Time = race.Time,
+                            MoneyInMarket = race.MoneyInMarket,
+                            URL = race.Url,
+                            MobileURL = race.MobileUrl
+                        });
                 }
 
                 db.BulkInsert(bulkExchangeRaces);
@@ -236,7 +247,7 @@ namespace sandboxConsole
                 var bulkExchange = new List<ExchangeMatch>();
                 foreach (Models.Match match in betdaq.Matches)
                 {
-                    if (match.Team1.Name != null)
+                    if (match.Team1.Name != null && match.Team1.Id != 999999)
                     {
                         bulkExchange.Add(new ExchangeMatch()
                         {
@@ -262,7 +273,7 @@ namespace sandboxConsole
                 }
                 foreach (Models.Match match in smar.Matches)
                 {
-                    if (match.Team1.Name != null)
+                    if (match.Team1.Name != null && match.Team1.Id != 999999)
                     {
                         bulkExchange.Add(new ExchangeMatch()
                         {
@@ -288,16 +299,16 @@ namespace sandboxConsole
                 }
                 db.BulkInsert(bulkExchange);
 
-                foreach (EF.TeamsNotFound team in newTeams)
-                {
-                    if (!db.TeamsNotFounds.Any(x => x.TeamName == team.TeamName))
-                        db.TeamsNotFounds.Add(team);
-                };
-                foreach (EF.CompetitionsNotFound comp in newComps)
-                {
-                    if (!db.CompetitionsNotFounds.Any(x => x.CompetitionName == comp.CompetitionName))
-                        db.CompetitionsNotFounds.Add(comp);
-                };
+                //foreach (EF.TeamsNotFound team in newTeams)
+                //{
+                //    if (!db.TeamsNotFounds.Any(x => x.TeamName == team.TeamName))
+                //        db.TeamsNotFounds.Add(team);
+                //};
+                //foreach (EF.CompetitionsNotFound comp in newComps)
+                //{
+                //    if (!db.CompetitionsNotFounds.Any(x => x.CompetitionName == comp.CompetitionName))
+                //        db.CompetitionsNotFounds.Add(comp);
+                //};
 
                 db.SaveChanges();
 
