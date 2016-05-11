@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="omproModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Bookmaker">
+    <Key>
+      <PropertyRef Name="BookmakerId" />
+    </Key>
+    <Property Name="BookmakerId" Type="Int32" Nullable="false" />
+    <Property Name="BookmakerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="omproEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Bookmakers" EntityType="Self.Bookmaker" />
+    <EntitySet Name="Teams" EntityType="omproModel.Team" />
+    <EntitySet Name="TeamsNotFounds" EntityType="omproModel.TeamsNotFound" />
+    <EntitySet Name="ExchangeMatches" EntityType="omproModel.ExchangeMatch" />
+    <EntitySet Name="Matches" EntityType="omproModel.Match" />
+    <EntitySet Name="Competitions" EntityType="omproModel.Competition" />
+    <EntitySet Name="CompetitionsNotFounds" EntityType="omproModel.CompetitionsNotFound" />
+    <EntitySet Name="Races" EntityType="omproModel.Race" />
+    <EntitySet Name="ExchangeRaces" EntityType="omproModel.ExchangeRace" />
+  </EntityContainer>
+  <EntityType Name="Team">
+    <Key>
+      <PropertyRef Name="TeamId" />
+    </Key>
+    <Property Name="TeamId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TeamName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="OMTeamId" Type="Int32" Nullable="false" />
+    <Property Name="DefaultName" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="TeamsNotFound">
+    <Key>
+      <PropertyRef Name="TeamId" />
+    </Key>
+    <Property Name="TeamId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TeamName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ExchangeMatch">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MatchId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BookmakerId" Type="Int32" Nullable="false" />
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+    <Property Name="Team1Id" Type="Int32" Nullable="false" />
+    <Property Name="Team1Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Team2Id" Type="Int32" Nullable="false" />
+    <Property Name="Team2Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Time" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Match">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MatchId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BookmakerId" Type="Int32" Nullable="false" />
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+    <Property Name="Team1Id" Type="Int32" Nullable="false" />
+    <Property Name="Team1Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Team2Id" Type="Int32" Nullable="false" />
+    <Property Name="Team2Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Time" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Bet" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Competition">
+    <Key>
+      <PropertyRef Name="CompetitionId" />
+    </Key>
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="OMCompetitionId" Type="Int32" Nullable="false" />
+    <Property Name="DefaultName" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="CompetitionsNotFound">
+    <Key>
+      <PropertyRef Name="CompetitionId" />
+    </Key>
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Race">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RaceId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BookmakerId" Type="Int32" Nullable="false" />
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+    <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Horse" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Time" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <EntityType Name="ExchangeRace">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RaceId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="BookmakerId" Type="Int32" Nullable="false" />
+    <Property Name="CompetitionId" Type="Int32" Nullable="false" />
+    <Property Name="CompetitionName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Horse" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Odds" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Time" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+  </EntityType>
+</Schema>
