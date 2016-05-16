@@ -17,6 +17,7 @@
     <EntitySet Name="CompetitionsNotFounds" EntityType="omproModel.CompetitionsNotFound" />
     <EntitySet Name="Races" EntityType="omproModel.Race" />
     <EntitySet Name="ExchangeRaces" EntityType="omproModel.ExchangeRace" />
+    <EntitySet Name="Errors" EntityType="omproModel.Error" />
   </EntityContainer>
   <EntityType Name="Team">
     <Key>
@@ -133,5 +134,12 @@
     <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <EntityType Name="Error">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Error1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

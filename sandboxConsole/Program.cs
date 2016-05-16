@@ -13,6 +13,7 @@ using EntityFramework.BulkInsert.Extensions;
 using System.Data.SqlClient;
 using System.Xml.Linq;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace sandboxConsole
 {
@@ -30,9 +31,13 @@ namespace sandboxConsole
 
                     List<EF.Team> teams = db.Teams.ToList();
                     List<TeamsNotFound> newTeams = db.TeamsNotFounds.ToList();
+                    List<TeamsNotFound> originalTeamsNotFound = db.TeamsNotFounds.ToList(); 
+                    List<TeamsNotFound> teamsForDB = new List<TeamsNotFound>();
 
                     List<EF.Competition> comps = db.Competitions.ToList();
                     List<CompetitionsNotFound> newComps = db.CompetitionsNotFounds.ToList();
+                    List<CompetitionsNotFound> originalCompsNotFound = db.CompetitionsNotFounds.ToList();
+                    List<CompetitionsNotFound> compsForDB = new List<CompetitionsNotFound>();
 
                     WH wh = new WH(teams, newTeams, comps, newComps);
                     Smar smar = new Smar(teams, newTeams, comps, newComps);
@@ -44,7 +49,7 @@ namespace sandboxConsole
 
                     betfair.Login();
                     betfair.ReadBetfairFootball("GBR");
-                    betfair.RefreshDB();
+                   // betfair.RefreshDB();
 
 
                     smar.ReadSmarUKFootball();
@@ -337,16 +342,19 @@ namespace sandboxConsole
                         }
                         db.BulkInsert(bulkExchange);
 
-                        //foreach (EF.TeamsNotFound team in newTeams)
-                        //{
-                        //    if (!db.TeamsNotFounds.Any(x => x.TeamName == team.TeamName))
-                        //        db.TeamsNotFounds.Add(team);
-                        //};
-                        //foreach (EF.CompetitionsNotFound comp in newComps)
-                        //{
-                        //    if (!db.CompetitionsNotFounds.Any(x => x.CompetitionName == comp.CompetitionName))
-                        //        db.CompetitionsNotFounds.Add(comp);
-                        //};
+                        foreach (EF.TeamsNotFound team in newTeams)
+                        {
+                            if (!originalTeamsNotFound.Any(x => x.TeamName == team.TeamName))
+                               teamsForDB.Add(team);
+                        };
+                        foreach (EF.CompetitionsNotFound comp in newComps)
+                        {
+                            if (!originalCompsNotFound.Any(x => x.CompetitionName == comp.CompetitionName))
+                                compsForDB.Add(comp);
+                        };
+
+                        db.BulkInsert(teamsForDB);
+                        db.BulkInsert(compsForDB);
 
                         db.SaveChanges();
 
@@ -360,7 +368,7 @@ namespace sandboxConsole
                     // Log in database
                     
                 }
-            }
+           }
         }
 
         public static void DeleteData()
@@ -403,7 +411,7 @@ namespace sandboxConsole
                 }
                 using (var cmd = sc.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM ExchangEMatches WHERE BookmakerId = @id";
+                    cmd.CommandText = "DELETE FROM ExchangeMatches WHERE BookmakerId = @id";
                     cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetfairId);
                     cmd.ExecuteNonQuery();
                 }
