@@ -9,9 +9,11 @@ namespace sandboxConsole.Misc
 {
     public class BookmakersConstants
     {
+        public const int BetfairId = 9003;
         public const int BetdaqId = 9002;
         public const int SmarketsId = 9001;
 
+        public static string BetfairName = "Betfair";
         public static string BetdaqName = "Betdaq";
         public static string SmarketsName = "Smarkets";
 

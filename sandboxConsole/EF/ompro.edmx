@@ -28,6 +28,13 @@
           <Property Name="CompetitionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CompetitionName" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <EntityType Name="Errors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Error" Type="varchar(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="ExchangeMatches">
           <Key>
             <PropertyRef Name="Id" />
@@ -132,6 +139,7 @@
           <EntitySet Name="Bookmakers" EntityType="Self.Bookmakers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Competitions" EntityType="Self.Competitions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompetitionsNotFound" EntityType="Self.CompetitionsNotFound" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Errors" EntityType="Self.Errors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExchangeMatches" EntityType="Self.ExchangeMatches" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExchangeRaces" EntityType="Self.ExchangeRaces" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Matches" EntityType="Self.Matches" Schema="dbo" store:Type="Tables" />
@@ -160,6 +168,7 @@
           <EntitySet Name="CompetitionsNotFounds" EntityType="omproModel.CompetitionsNotFound" />
           <EntitySet Name="Races" EntityType="omproModel.Race" />
           <EntitySet Name="ExchangeRaces" EntityType="omproModel.ExchangeRace" />
+          <EntitySet Name="Errors" EntityType="omproModel.Error" />
           </EntityContainer>
         <EntityType Name="Team">
           <Key>
@@ -276,6 +285,13 @@
           <Property Name="URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="MobileURL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="MoneyInMarket" Type="Decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Error">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Error1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -411,6 +427,14 @@
                 <ScalarProperty Name="BookmakerId" ColumnName="BookmakerId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="RaceId" ColumnName="RaceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Errors">
+            <EntityTypeMapping TypeName="omproModel.Error">
+              <MappingFragment StoreEntitySet="Errors">
+                <ScalarProperty Name="Error1" ColumnName="Error" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
