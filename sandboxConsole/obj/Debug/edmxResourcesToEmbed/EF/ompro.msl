@@ -136,7 +136,19 @@
     <EntitySetMapping Name="Errors">
       <EntityTypeMapping TypeName="omproModel.Error">
         <MappingFragment StoreEntitySet="Errors">
+          <ScalarProperty Name="bookmaker" ColumnName="bookmaker" />
+          <ScalarProperty Name="ErrorDateTime" ColumnName="ErrorDateTime" />
           <ScalarProperty Name="Error1" ColumnName="Error" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LoadTimes">
+      <EntityTypeMapping TypeName="omproModel.LoadTime">
+        <MappingFragment StoreEntitySet="LoadTimes">
+          <ScalarProperty Name="bookmaker" ColumnName="bookmaker" />
+          <ScalarProperty Name="LoadDateTime" ColumnName="LoadDateTime" />
+          <ScalarProperty Name="ElapsedTime" ColumnName="ElapsedTime" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

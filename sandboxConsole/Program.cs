@@ -70,7 +70,7 @@ namespace sandboxConsole
                     wh.ReadWHEuroFootball();
                     wh.ReadWHInternationalFootball();
 
-                    if (wh.Matches.Count() > 0)
+                    if (wh.Matches.Count() > 0 || wh.Races.Count() > 0)
                     {
                         DeleteData();
 
@@ -355,18 +355,19 @@ namespace sandboxConsole
 
                         db.BulkInsert(teamsForDB);
                         db.BulkInsert(compsForDB);
-
-                        db.SaveChanges();
-
+                        
+                    }
+                    else
+                    {
+                        ErrorHelper.CreateError(BookmakersConstants.BetfairName, "No matches/races found");
                     }
                     stopwatch.Stop();
-                    Console.WriteLine(">>>>>>>> Time to do logic" + stopwatch.ElapsedMilliseconds.ToString());
+                    var elapsedTime = Convert.ToInt32(stopwatch.ElapsedMilliseconds/1000);
+                    LogHelper.LogTimes(elapsedTime, BookmakersConstants.BetfairName);
                 }
                 catch (Exception e)
                 {
-                    // Notify via text/email
-                    // Log in database
-                    
+                    ErrorHelper.CreateError(BookmakersConstants.BetfairName, e.Message);
                 }
            }
         }
@@ -379,6 +380,12 @@ namespace sandboxConsole
             using (SqlConnection sc = new SqlConnection(ConnectionString))
             {
                 sc.Open();
+                using (var cmd = sc.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Matches WHERE BookmakerId = @id";
+                    cmd.Parameters.AddWithValue("@id", BookmakersConstants.WilliamHillId);
+                    cmd.ExecuteNonQuery();
+                }
                 using (var cmd = sc.CreateCommand())
                 {
                     cmd.CommandText = "DELETE FROM Matches WHERE BookmakerId = @id";

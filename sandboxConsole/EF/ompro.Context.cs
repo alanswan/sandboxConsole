@@ -35,5 +35,6 @@ namespace sandboxConsole.EF
         public virtual DbSet<Race> Races { get; set; }
         public virtual DbSet<ExchangeRace> ExchangeRaces { get; set; }
         public virtual DbSet<Error> Errors { get; set; }
+        public virtual DbSet<LoadTime> LoadTimes { get; set; }
     }
 }

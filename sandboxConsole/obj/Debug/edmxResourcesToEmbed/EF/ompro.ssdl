@@ -29,6 +29,8 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Error" Type="varchar(max)" Nullable="false" />
+    <Property Name="ErrorDateTime" Type="datetime" />
+    <Property Name="bookmaker" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="ExchangeMatches">
     <Key>
@@ -71,6 +73,15 @@
     <Property Name="URL" Type="varchar" MaxLength="500" />
     <Property Name="MobileURL" Type="varchar" MaxLength="500" />
     <Property Name="MoneyInMarket" Type="decimal" Precision="10" Scale="2" />
+  </EntityType>
+  <EntityType Name="LoadTimes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ElapsedTime" Type="int" Nullable="false" />
+    <Property Name="LoadDateTime" Type="datetime" />
+    <Property Name="bookmaker" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Matches">
     <Key>
@@ -137,6 +148,7 @@
     <EntitySet Name="Errors" EntityType="Self.Errors" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ExchangeMatches" EntityType="Self.ExchangeMatches" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ExchangeRaces" EntityType="Self.ExchangeRaces" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LoadTimes" EntityType="Self.LoadTimes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Matches" EntityType="Self.Matches" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Races" EntityType="Self.Races" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Teams" EntityType="Self.Teams" Schema="dbo" store:Type="Tables" />

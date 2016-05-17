@@ -62,14 +62,13 @@ namespace sandboxConsole.Helpers.XML.Exchange
                 var loginContent = new StringContent("username=kevin@wearedandify.com&password=forest99", Encoding.UTF8, "application/x-www-form-urlencoded");
                 var response = client.PostAsync("api/login", loginContent).Result;
                 LoginResponse = (BetfairLoginResponse)JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result, typeof(BetfairLoginResponse));
-                db.Errors.Add(new Error() { Error1 = LoginResponse.status + "|||" + LoginResponse.error });
+
+                //db.Errors.Add(new Error() { Error1 = LoginResponse.status + "|||" + LoginResponse.error });
             }
         }
 
         public void ReadBetfairFootball(string region)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             this.CompetitionRegions = new List<string>() { region };
             GetCompetitions();
             GetEvents();
@@ -77,9 +76,6 @@ namespace sandboxConsole.Helpers.XML.Exchange
             GetMarketBooks();
 
             FootballLogic();
-            stopwatch.Stop();
-            Console.WriteLine(">>>>>>>> Time to do logic" + stopwatch.ElapsedMilliseconds.ToString());
-            //NotFoundToDB();
         }
 
         public void FootballLogic()
@@ -237,14 +233,8 @@ namespace sandboxConsole.Helpers.XML.Exchange
                 }
                 catch (Exception e)
                 {
-                    db.Errors.Add(new Error() { Error1 = response.Content.ReadAsStringAsync().Result });
-                    db.SaveChanges();
+                    ErrorHelper.CreateError(BookmakersConstants.BetfairName,response.Content.ReadAsStringAsync().Result);
                 }
-                //finally
-                //{
-                //    db.Errors.Add(new Error() { Error1 = response.ToString() });
-                //    db.SaveChanges();
-                //}
             }
         }
         public void GetEvents()
@@ -254,31 +244,38 @@ namespace sandboxConsole.Helpers.XML.Exchange
             //{
             using (var client = new HttpClient())
             {
-                System.Net.ServicePointManager.Expect100Continue = false;
-                client.BaseAddress = new Uri("https://api.betfair.com/exchange/betting/rest/v1.0/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("X-Application", "MoHFRmBODsw9VxE1");
-                client.DefaultRequestHeaders.Add("X-Authentication", LoginResponse.token);
-
-                int[] eventTypeIds = new int[1];
-                eventTypeIds[0] = 1;
-
-                BetfairEventRequest request = new BetfairEventRequest()
+                HttpResponseMessage response = new HttpResponseMessage();
+                try
                 {
-                    Filter = new Filter() { EventTypeIds = eventTypeIds, CompetitionIds = compIds.ToArray() },
-                    MaxResults = 999
-                };
-                //BetfairEventRequest request = new BetfairEventRequest() { filter = new Filter() {  } };
+                    System.Net.ServicePointManager.Expect100Continue = false;
+                    client.BaseAddress = new Uri("https://api.betfair.com/exchange/betting/rest/v1.0/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("X-Application", "MoHFRmBODsw9VxE1");
+                    client.DefaultRequestHeaders.Add("X-Authentication", LoginResponse.token);
 
-                var convertedObject = JsonConvert.SerializeObject(request);
-                var httpContent = new StringContent(convertedObject, Encoding.UTF8, "application/json");
-                //var httpContent = new StringContent("filter=", Encoding.UTF8, "application/x-www-form-urlencoded");
-                var response = client.PostAsync("listEvents/", httpContent).Result;
-                var events = (List<BFEvent>)JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result, typeof(List<BFEvent>));
-                BfEvents.AddRange(events);
-                EventIds.AddRange(events.Select(x => x.eventDetails.Id).ToList());
-                //  }
+                    int[] eventTypeIds = new int[1];
+                    eventTypeIds[0] = 1;
+
+                    BetfairEventRequest request = new BetfairEventRequest()
+                    {
+                        Filter = new Filter() { EventTypeIds = eventTypeIds, CompetitionIds = compIds.ToArray() },
+                        MaxResults = 999
+                    };
+                    //BetfairEventRequest request = new BetfairEventRequest() { filter = new Filter() {  } };
+
+                    var convertedObject = JsonConvert.SerializeObject(request);
+                    var httpContent = new StringContent(convertedObject, Encoding.UTF8, "application/json");
+                    //var httpContent = new StringContent("filter=", Encoding.UTF8, "application/x-www-form-urlencoded");
+                    response = client.PostAsync("listEvents/", httpContent).Result;
+                    var events = (List<BFEvent>)JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result, typeof(List<BFEvent>));
+                    BfEvents.AddRange(events);
+                    EventIds.AddRange(events.Select(x => x.eventDetails.Id).ToList());
+                }
+                catch (Exception e)
+                {
+                    ErrorHelper.CreateError(BookmakersConstants.BetfairName, response.Content.ReadAsStringAsync().Result);
+                }
             }
         }
         public void GetMarkets()
@@ -288,41 +285,49 @@ namespace sandboxConsole.Helpers.XML.Exchange
             //{
             using (var client = new HttpClient())
             {
-                System.Net.ServicePointManager.Expect100Continue = false;
-                client.BaseAddress = new Uri("https://api.betfair.com/exchange/betting/rest/v1.0/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("X-Application", "MoHFRmBODsw9VxE1");
-                client.DefaultRequestHeaders.Add("X-Authentication", LoginResponse.token);
-
-                int[] eventTypeIds = new int[1];
-                eventTypeIds[0] = 1;
-
-                string[] marketTypeCodes = new string[1];
-                marketTypeCodes[0] = "MATCH_ODDS";
-
-                BetfairEventRequest request = new BetfairEventRequest()
+                HttpResponseMessage response = new HttpResponseMessage();
+                try
                 {
-                    Filter =
-                        new Filter()
-                        {
-                            EventTypeIds = eventTypeIds,
-                            CompetitionIds = compIds.ToArray(),
-                            MarketTypeCodes = marketTypeCodes
-                        },
-                    MaxResults = 999,
-                    MarketProjection = new string[] { "COMPETITION", "EVENT", "RUNNER_DESCRIPTION", "RUNNER_METADATA" }
+                    System.Net.ServicePointManager.Expect100Continue = false;
+                    client.BaseAddress = new Uri("https://api.betfair.com/exchange/betting/rest/v1.0/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("X-Application", "MoHFRmBODsw9VxE1");
+                    client.DefaultRequestHeaders.Add("X-Authentication", LoginResponse.token);
 
-                };
-                //BetfairEventRequest request = new BetfairEventRequest() { filter = new Filter() {  } };
+                    int[] eventTypeIds = new int[1];
+                    eventTypeIds[0] = 1;
 
-                var convertedObject = JsonConvert.SerializeObject(request);
-                var httpContent = new StringContent(convertedObject, Encoding.UTF8, "application/json");
-                //var httpContent = new StringContent("filter=", Encoding.UTF8, "application/x-www-form-urlencoded");
-                var response = client.PostAsync("listMarketCatalogue/", httpContent).Result;
-                //there are more details available in the description property of a BFMarket - not currently called as deemed as not needed - see MarketCatalogue in the api
-                var markets = (List<BFMarket>)JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result, typeof(List<BFMarket>));
-                this.BfMarkets.AddRange(markets);
+                    string[] marketTypeCodes = new string[1];
+                    marketTypeCodes[0] = "MATCH_ODDS";
+
+                    BetfairEventRequest request = new BetfairEventRequest()
+                    {
+                        Filter =
+                            new Filter()
+                            {
+                                EventTypeIds = eventTypeIds,
+                                CompetitionIds = compIds.ToArray(),
+                                MarketTypeCodes = marketTypeCodes
+                            },
+                        MaxResults = 999,
+                        MarketProjection = new string[] { "COMPETITION", "EVENT", "RUNNER_DESCRIPTION", "RUNNER_METADATA" }
+
+                    };
+                    //BetfairEventRequest request = new BetfairEventRequest() { filter = new Filter() {  } };
+
+                    var convertedObject = JsonConvert.SerializeObject(request);
+                    var httpContent = new StringContent(convertedObject, Encoding.UTF8, "application/json");
+                    //var httpContent = new StringContent("filter=", Encoding.UTF8, "application/x-www-form-urlencoded");
+                    response = client.PostAsync("listMarketCatalogue/", httpContent).Result;
+                    //there are more details available in the description property of a BFMarket - not currently called as deemed as not needed - see MarketCatalogue in the api
+                    var markets = (List<BFMarket>)JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result, typeof(List<BFMarket>));
+                    this.BfMarkets.AddRange(markets);
+                }
+                catch (Exception e)
+                {
+                    ErrorHelper.CreateError(BookmakersConstants.BetfairName, response.Content.ReadAsStringAsync().Result);
+                }
             }
             //}
         }
@@ -331,39 +336,44 @@ namespace sandboxConsole.Helpers.XML.Exchange
         {
             for (int i = 0; i < this.BfMarkets.Count; i = i + 10)
             {
-
                 using (var client = new HttpClient())
                 {
-                    System.Net.ServicePointManager.Expect100Continue = false;
-                    client.BaseAddress = new Uri("https://api.betfair.com/exchange/betting/rest/v1.0/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("X-Application", "MoHFRmBODsw9VxE1");
-                    client.DefaultRequestHeaders.Add("X-Authentication", LoginResponse.token);
-                    decimal[] marketIds = this.BfMarkets.Select(x => x.MarketId).ToArray();
-
-                    BetfairMarketRequest request = new BetfairMarketRequest()
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    try
                     {
+                        System.Net.ServicePointManager.Expect100Continue = false;
+                        client.BaseAddress = new Uri("https://api.betfair.com/exchange/betting/rest/v1.0/");
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        client.DefaultRequestHeaders.Add("X-Application", "MoHFRmBODsw9VxE1");
+                        client.DefaultRequestHeaders.Add("X-Authentication", LoginResponse.token);
+                        decimal[] marketIds = this.BfMarkets.Select(x => x.MarketId).ToArray();
 
-                        MarketIds = this.BfMarkets.Select(x => x.MarketId.ToString()).Skip(i).Take(10).ToArray(),
-                        PriceProjection = new PriceProjection()
+                        BetfairMarketRequest request = new BetfairMarketRequest()
                         {
-                            PriceData = new string[2] { "EX_BEST_OFFERS", "EX_TRADED" },
-                            Virtualise = "true"
-                        },
-                        //OrderProjection = "ALL",
-                        //MatchProjection = "NO_ROLLUP"
+                            MarketIds = this.BfMarkets.Select(x => x.MarketId.ToString()).Skip(i).Take(10).ToArray(),
+                            PriceProjection = new PriceProjection()
+                            {
+                                PriceData = new string[2] { "EX_BEST_OFFERS", "EX_TRADED" },
+                                Virtualise = "true"
+                            },
+                            //OrderProjection = "ALL",
+                            //MatchProjection = "NO_ROLLUP"
 
-                    };
-                    var convertedObject = JsonConvert.SerializeObject(request);
-                    var httpContent = new StringContent(convertedObject, Encoding.UTF8, "application/json");
-                    //var httpContent = new StringContent("filter=", Encoding.UTF8, "application/x-www-form-urlencoded");
-                    var response = client.PostAsync("listMarketBook/", httpContent).Result;
-                    var marketBooks =
-                        (List<BFMarketBook>)
-                            JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result,
-                                typeof(List<BFMarketBook>));
-                    this.BfMarketBooks.AddRange(marketBooks);
+                        };
+                        var convertedObject = JsonConvert.SerializeObject(request);
+                        var httpContent = new StringContent(convertedObject, Encoding.UTF8, "application/json");
+                        response = client.PostAsync("listMarketBook/", httpContent).Result;
+                        var marketBooks =
+                            (List<BFMarketBook>)
+                                JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result,
+                                    typeof(List<BFMarketBook>));
+                        this.BfMarketBooks.AddRange(marketBooks);
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorHelper.CreateError(BookmakersConstants.BetfairName, response.Content.ReadAsStringAsync().Result);
+                    }
                 }
             }
         }

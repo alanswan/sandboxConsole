@@ -88,6 +88,9 @@
     <Compile Include="EF\ExchangeRace.cs">
       <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\LoadTime.cs">
+      <DependentUpon>ompro.tt</DependentUpon>
+    </Compile>
     <Compile Include="EF\Match.cs">
       <DependentUpon>ompro.tt</DependentUpon>
     </Compile>
@@ -126,6 +129,9 @@
     <Compile Include="Helpers\XML\Exchange\Betdaq.cs" />
     <Compile Include="Helpers\XML\Exchange\Smar.cs" />
     <Compile Include="Helpers\XML\WH.cs" />
+    <Compile Include="Misc\LogHelper.cs" />
+    <Compile Include="Misc\ErrorHelper.cs" />
+    <Compile Include="Misc\EmailHelper.cs" />
     <Compile Include="Misc\Constants.cs" />
     <Compile Include="Models\Adapters.cs" />
     <Compile Include="Models\Utilities.cs" />

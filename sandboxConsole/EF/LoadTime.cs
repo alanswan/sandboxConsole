@@ -12,11 +12,11 @@ namespace sandboxConsole.EF
     using System;
     using System.Collections.Generic;
     
-    public partial class Error
+    public partial class LoadTime
     {
         public int Id { get; set; }
-        public string Error1 { get; set; }
-        public Nullable<System.DateTime> ErrorDateTime { get; set; }
+        public int ElapsedTime { get; set; }
+        public Nullable<System.DateTime> LoadDateTime { get; set; }
         public string bookmaker { get; set; }
     }
 }

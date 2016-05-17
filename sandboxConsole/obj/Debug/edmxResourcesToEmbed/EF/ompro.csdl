@@ -18,6 +18,7 @@
     <EntitySet Name="Races" EntityType="omproModel.Race" />
     <EntitySet Name="ExchangeRaces" EntityType="omproModel.ExchangeRace" />
     <EntitySet Name="Errors" EntityType="omproModel.Error" />
+    <EntitySet Name="LoadTimes" EntityType="omproModel.LoadTime" />
   </EntityContainer>
   <EntityType Name="Team">
     <Key>
@@ -141,5 +142,16 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Error1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ErrorDateTime" Type="DateTime" Precision="3" />
+    <Property Name="bookmaker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="LoadTime">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ElapsedTime" Type="Int32" Nullable="false" />
+    <Property Name="LoadDateTime" Type="DateTime" Precision="3" />
+    <Property Name="bookmaker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>
