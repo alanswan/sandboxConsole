@@ -131,68 +131,7 @@ namespace sandboxConsole.Helpers.XML.Exchange
             }
         }
 
-        //public void RefreshDB()
-        //{
-        //    SqlConnection conn = new SqlConnection();
-        //    var ConnectionString =
-        //        "data source=mssql2.gear.host;initial catalog=ompro;persist security info=True;user id=ompro;password=Co31?i!8iF74;MultipleActiveResultSets=True;";
-
-        //    using (SqlConnection sc = new SqlConnection(ConnectionString))
-        //    {
-        //        sc.Open();
-        //        using (var cmd = sc.CreateCommand())
-        //        {
-        //            cmd.CommandText = "DELETE FROM ExchangeMatches WHERE BookmakerId = @id";
-        //            cmd.Parameters.AddWithValue("@id", BookmakersConstants.BetfairId);
-        //            cmd.ExecuteNonQuery();
-        //        }
-        //    }
-
-        //    var bulkExchange = new List<ExchangeMatch>();
-        //    foreach (sandboxConsole.Models.Match match in this.Matches)
-        //    {
-        //        if (match.Team1.Name != null && match.Team1.Id != 999999)
-        //        {
-        //            bulkExchange.Add(new ExchangeMatch()
-        //            {
-        //                MatchId = match.Id,
-        //                Name = match.Name,
-        //                BookmakerId = match.BookmakerId,
-        //                CompetitionId = match.Competition.Id,
-        //                CompetitionName = match.Competition.Name,
-        //                Team1Id = match.Team1.Id,
-        //                Team1Name = match.Team1.Name,
-        //                Team2Id = match.Team2.Id,
-        //                Team2Name = match.Team2.Name,
-        //                Bet = match.Bet,
-        //                Odds = match.Odds,
-        //                Date = match.Date,
-        //                LastUpdated = match.LastUpdated,
-        //                Time = match.Time,
-        //                MoneyInMarket = match.MoneyInMarket,
-        //                URL = match.Url,
-        //                MobileURL = match.MobileUrl
-        //            });
-        //        }
-        //    }
-
-        //    db.BulkInsert(bulkExchange);
-
-        //}
-
-        //public void NotFoundToDB()
-        //{
-        //    foreach (sandboxConsole.EF.TeamsNotFound team in NewTeams)
-        //    {
-        //        if (!db.TeamsNotFounds.Any(x => x.TeamName == team.TeamName))
-        //            db.TeamsNotFounds.Add(team);
-        //    };
-        //    foreach (sandboxConsole.EF.CompetitionsNotFound comp in NewComps)
-        //    {
-        //        if (!db.CompetitionsNotFounds.Any(x => x.CompetitionName == comp.CompetitionName))
-        //            db.CompetitionsNotFounds.Add(comp);
-        //    };
-        //}
+        
 
         public void GetCompetitions()
         {

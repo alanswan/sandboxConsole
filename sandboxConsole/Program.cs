@@ -72,7 +72,7 @@ namespace sandboxConsole
 
                     if (wh.Matches.Count() > 0 || wh.Races.Count() > 0)
                     {
-                        DeleteData();
+                        
 
                         var bulkMatches = new List<EF.Match>();
                         foreach (Models.Match match in wh.Matches)
@@ -155,7 +155,7 @@ namespace sandboxConsole
                                 });
                             }
                         }
-
+                        DeleteData();
                         db.BulkInsert(bulkMatches);
 
                         var bulkRaces = new List<EF.Race>();
@@ -258,7 +258,7 @@ namespace sandboxConsole
                                 MobileURL = race.MobileUrl
                             });
                         }
-
+                        DeleteDataRaces();
                         db.BulkInsert(bulkExchangeRaces);
 
                         var bulkExchange = new List<ExchangeMatch>();
